@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { character } from '$lib/stores/character';
 	import Section from '$lib/components/common/Section.svelte';
+	import { onMount } from 'svelte';
 
 	function updateField(field: string, value: string | number) {
 		character.update((char) => ({
@@ -9,7 +10,9 @@
 		}));
 	}
 
-    $: vitalityPercentage = ($character.vitality.current / $character.vitality.max) * 100;
+    $: vitalityPercentage = $character?.vitality?.current != null && $character?.vitality?.max != null
+        ? ($character.vitality.current / $character.vitality.max) * 100
+        : 0;
     $: vitalityColor = vitalityPercentage > 50 ? '#4CAF50' : 
                        vitalityPercentage > 30 ? '#FFC107' : 
                        '#F44336';
