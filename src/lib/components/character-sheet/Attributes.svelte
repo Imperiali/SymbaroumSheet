@@ -3,6 +3,12 @@
     import type { Character } from '$lib/types/character';
     
     type AttributeName = keyof Character['attributes'];
+
+    let visible = true;
+
+    function toggleVisibility() {
+		visible = !visible;
+	}
     
     function updateAttribute(name: AttributeName, value: number) {
         character.update(char => ({
@@ -27,7 +33,8 @@
 </script>
 
 <div class="section attributes">
-    <h2>Atributos</h2>
+    <h2 on:click={(toggleVisibility)}>Atributos</h2>
+    {#if visible}
     <div class="attributes-grid">
         {#each attributes as { name, label }}
             <div class="attribute">
@@ -43,6 +50,7 @@
             </div>
         {/each}
     </div>
+    {/if}
 </div>
 
 <style>

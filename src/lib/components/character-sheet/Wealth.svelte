@@ -1,9 +1,14 @@
 <script lang="ts">
     import { character } from '$lib/stores/character';
+
+    let visible = true;
 </script>
 
+
+
 <div class="section wealth">
-    <h2>Riqueza</h2>
+    <h2 on:click={() => (visible = !visible)}>Riqueza</h2>
+    {#if visible}
     <div class="field">
         <label for="thaler">Thalers:</label>
         <input type="number" id="thaler" bind:value={$character.money.thaler} min="0" />
@@ -16,6 +21,7 @@
         <label for="orteg">Ortegs:</label>
         <input type="number" id="orteg" bind:value={$character.money.orteg} min="0" />
     </div>
+    {/if}
 </div>
 
 <style>

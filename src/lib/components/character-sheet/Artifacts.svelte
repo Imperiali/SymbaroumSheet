@@ -1,6 +1,8 @@
 <script lang="ts">
     import { character } from '$lib/stores/character';
 
+    let visible = true;
+
     function addArtifact() {
         character.update(char => ({
             ...char,
@@ -22,7 +24,8 @@
 </script>
 
 <div class="section artifacts">
-    <h2>Artefatos e Tesouros Místicos</h2>
+    <h2 on:click={() => (visible = !visible)}>Artefatos e Tesouros Místicos</h2>
+    {#if visible}
     <button class="add-button" on:click={addArtifact}>+ Adicionar Artefato</button>
     {#each $character.artifacts as artifact, i}
         <div class="artifact-entry">
@@ -45,6 +48,7 @@
             <button class="remove-button" on:click={() => removeArtifact(i)}>Remover</button>
         </div>
     {/each}
+    {/if}
 </div>
 
 <style>

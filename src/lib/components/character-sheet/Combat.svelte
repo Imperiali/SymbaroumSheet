@@ -1,6 +1,8 @@
 <script lang="ts">
     import { character } from '$lib/stores/character';
 
+    let visible = true;
+
     function addWeapon() {
         character.update(char => ({
             ...char,
@@ -59,8 +61,8 @@
 </script>
 
 <div class="section combat">
-    <h2>Armas e Armadura</h2>
-    
+    <h2 on:click={() => (visible = !visible)}>Armas e Armadura</h2>
+    {#if visible}
     <div class="subsection weapons">
         <h3>Armas</h3>
         <button class="add-button" on:click={addWeapon}>+ Adicionar Arma</button>
@@ -115,7 +117,8 @@
             </div>
         {/each}
     </div>
-
+    {/if}
+    {#if visible}
     <div class="subsection armor">
         <h3>Armadura</h3>
         <button class="add-button" on:click={addArmor}>+ Adicionar Armadura</button>
@@ -152,6 +155,7 @@
             </div>
         {/each}
     </div>
+    {/if}
 </div>
 
 <style>

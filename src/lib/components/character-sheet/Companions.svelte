@@ -1,6 +1,8 @@
 <script lang="ts">
     import { character } from '$lib/stores/character';
 
+    let visible = true;
+
     function addCompanion() {
         character.update(char => ({
             ...char,
@@ -8,7 +10,7 @@
                 name: '',
                 race: '',
                 occupation: '',
-                money: ''
+                player: ''
             }]
         }));
     }
@@ -22,7 +24,8 @@
 </script>
 
 <div class="section companions">
-    <h2>Amigos e Companheiros</h2>
+    <h2 on:click={() => (visible = !visible)}>Amigos e Companheiros</h2>
+    {#if visible}
     <button class="add-button" on:click={addCompanion}>+ Adicionar Companheiro</button>
     {#each $character.companions as companion, i}
         <div class="companion-entry">
@@ -39,12 +42,13 @@
                 <input type="text" id="companion-occupation-{i}" bind:value={companion.occupation} />
             </div>
             <div class="field">
-                <label for="companion-money-{i}">Dinheiro:</label>
-                <input type="text" id="companion-money-{i}" bind:value={companion.money} />
+                <label for="companion-player-{i}">Dinheiro:</label>
+                <input type="text" id="companion-player-{i}" bind:value={companion.player} />
             </div>
             <button class="remove-button" on:click={() => removeCompanion(i)}>Remover</button>
         </div>
     {/each}
+    {/if}
 </div>
 
 <style>

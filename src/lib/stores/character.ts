@@ -8,6 +8,7 @@ const createCharacterStore = () => {
         race: '',
         occupation: '',
         experience: 0,
+        currentExperience: 0,
         shadow: '',
         quote: '',
         attributes: {

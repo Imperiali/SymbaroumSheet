@@ -4,6 +4,7 @@ export type Character = {
     race: string;
     occupation: string;
     experience: number;
+    currentExperience: number;
     shadow: string;
     quote: string;
 
@@ -50,7 +51,11 @@ export type Character = {
         shilling: number;
         orteg: number;
     };
-    equipment: string[];
+
+    equipment: Array<{ 
+        name: string; 
+        description: string; 
+    }>;
 
     // Habilidades e Poderes
     abilities: Array<{
@@ -64,7 +69,7 @@ export type Character = {
         name: string;
         race: string;
         occupation: string;
-        money: string;
+        player: string;
     }>;
 
     // Artefatos e Tesouros Místicos
