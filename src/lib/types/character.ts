@@ -7,6 +7,16 @@ export type Character = {
     currentExperience: number;
     shadow: string;
     quote: string;
+    painThreshold: number;
+    vitality: {
+        current: number;
+        max: number;
+    };
+    corruption: {
+        current: number;
+        permanent: number;
+    };
+    corruptionThreshold: number;
 
     // Atributos
     attributes: {
@@ -21,15 +31,10 @@ export type Character = {
     };
 
     // Status
-    corruption: {
-        temporary: number;
-        permanent: number;
-    };
     toughness: {
         base: number;
         current: number;
     };
-    painThreshold: number;
 
     // Combate
     armor: Array<{

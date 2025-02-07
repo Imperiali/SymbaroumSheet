@@ -1,14 +1,9 @@
 <script lang="ts">
     import { character } from '$lib/stores/character';
+    import Section from '$lib/components/common/Section.svelte';
     import type { Character } from '$lib/types/character';
     
     type AttributeName = keyof Character['attributes'];
-
-    let visible = true;
-
-    function toggleVisibility() {
-		visible = !visible;
-	}
     
     function updateAttribute(name: AttributeName, value: number) {
         character.update(char => ({
@@ -32,9 +27,7 @@
     ];
 </script>
 
-<div class="section attributes">
-    <h2 on:click={(toggleVisibility)}>Atributos</h2>
-    {#if visible}
+<Section title="Atributos">
     <div class="attributes-grid">
         {#each attributes as { name, label }}
             <div class="attribute">
@@ -50,43 +43,9 @@
             </div>
         {/each}
     </div>
-    {/if}
-</div>
+</Section>
 
 <style>
-    .section {
-        background: #fff;
-        border: 2px solid var(--border-color);
-        border-radius: 0;
-        padding: 20px;
-        margin-bottom: 20px;
-        position: relative;
-    }
-
-    .section::before {
-        content: '';
-        position: absolute;
-        top: 5px;
-        left: 5px;
-        right: 5px;
-        bottom: 5px;
-        border: 1px solid var(--border-color);
-        pointer-events: none;
-    }
-
-    h2 {
-        font-family: var(--header-font);
-        color: var(--primary-color);
-        margin: -20px -20px 20px -20px;
-        padding: 10px 20px;
-        background: var(--background-color);
-        border-bottom: 2px solid var(--border-color);
-        text-transform: uppercase;
-        font-size: 1.2em;
-        text-align: center;
-        letter-spacing: 1px;
-    }
-
     .attributes-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));

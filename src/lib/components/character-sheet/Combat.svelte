@@ -1,7 +1,6 @@
 <script lang="ts">
     import { character } from '$lib/stores/character';
-
-    let visible = true;
+    import Section from '$lib/components/common/Section.svelte';
 
     function addWeapon() {
         character.update(char => ({
@@ -53,145 +52,108 @@
     function updateArmor(index: number, field: string, value: string | number) {
         character.update(char => ({
             ...char,
-            armor: char.armor.map((item, i) => 
-                i === index ? { ...item, [field]: value } : item
+            armor: char.armor.map((armor, i) => 
+                i === index ? { ...armor, [field]: value } : armor
             )
         }));
     }
 </script>
 
-<div class="section combat">
-    <h2 on:click={() => (visible = !visible)}>Armas e Armadura</h2>
-    {#if visible}
+<Section title="Armas e Armadura">
     <div class="subsection weapons">
         <h3>Armas</h3>
         <button class="add-button" on:click={addWeapon}>+ Adicionar Arma</button>
-        {#each $character.weapons as weapon, index}
+        {#each $character.weapons as weapon, i}
             <div class="weapon-entry">
                 <div class="field">
-                    <label for="weapon-name-{index}">Nome:</label>
-                    <input
-                        type="text"
-                        id="weapon-name-{index}"
+                    <label for="weapon-name-{i}">Nome:</label>
+                    <input 
+                        type="text" 
+                        id="weapon-name-{i}" 
                         bind:value={weapon.name}
-                        on:input={(e) => updateWeapon(index, 'name', e.currentTarget.value)}
+                        on:input={(e) => updateWeapon(i, 'name', e.currentTarget.value)}
                     />
                 </div>
                 <div class="field">
-                    <label for="weapon-grace-{index}">Graça:</label>
-                    <input
-                        type="text"
-                        id="weapon-grace-{index}"
+                    <label for="weapon-grace-{i}">Graça:</label>
+                    <input 
+                        type="text" 
+                        id="weapon-grace-{i}" 
                         bind:value={weapon.grace}
-                        on:input={(e) => updateWeapon(index, 'grace', e.currentTarget.value)}
+                        on:input={(e) => updateWeapon(i, 'grace', e.currentTarget.value)}
                     />
                 </div>
                 <div class="field">
-                    <label for="weapon-damage-{index}">Dano:</label>
-                    <input
-                        type="text"
-                        id="weapon-damage-{index}"
+                    <label for="weapon-damage-{i}">Dano:</label>
+                    <input 
+                        type="text" 
+                        id="weapon-damage-{i}" 
                         bind:value={weapon.damage}
-                        on:input={(e) => updateWeapon(index, 'damage', e.currentTarget.value)}
+                        on:input={(e) => updateWeapon(i, 'damage', e.currentTarget.value)}
                     />
                 </div>
                 <div class="field">
-                    <label for="weapon-quality-{index}">Qualidade:</label>
-                    <input
-                        type="text"
-                        id="weapon-quality-{index}"
+                    <label for="weapon-quality-{i}">Qualidade:</label>
+                    <input 
+                        type="text" 
+                        id="weapon-quality-{i}" 
                         bind:value={weapon.quality}
-                        on:input={(e) => updateWeapon(index, 'quality', e.currentTarget.value)}
+                        on:input={(e) => updateWeapon(i, 'quality', e.currentTarget.value)}
                     />
                 </div>
                 <div class="field">
-                    <label for="weapon-attribute-{index}">Atributo:</label>
-                    <input
-                        type="text"
-                        id="weapon-attribute-{index}"
+                    <label for="weapon-attribute-{i}">Atributo:</label>
+                    <input 
+                        type="text" 
+                        id="weapon-attribute-{i}" 
                         bind:value={weapon.attribute}
-                        on:input={(e) => updateWeapon(index, 'attribute', e.currentTarget.value)}
+                        on:input={(e) => updateWeapon(i, 'attribute', e.currentTarget.value)}
                     />
                 </div>
-                <button class="remove-button" on:click={() => removeWeapon(index)}>Remover</button>
+                <button class="remove-button" on:click={() => removeWeapon(i)}>Remover</button>
             </div>
         {/each}
     </div>
-    {/if}
-    {#if visible}
+
     <div class="subsection armor">
         <h3>Armadura</h3>
         <button class="add-button" on:click={addArmor}>+ Adicionar Armadura</button>
-        {#each $character.armor as armor, index}
+        {#each $character.armor as armor, i}
             <div class="armor-entry">
                 <div class="field">
-                    <label for="armor-name-{index}">Nome:</label>
-                    <input
-                        type="text"
-                        id="armor-name-{index}"
+                    <label for="armor-name-{i}">Nome:</label>
+                    <input 
+                        type="text" 
+                        id="armor-name-{i}" 
                         bind:value={armor.name}
-                        on:input={(e) => updateArmor(index, 'name', e.currentTarget.value)}
+                        on:input={(e) => updateArmor(i, 'name', e.currentTarget.value)}
                     />
                 </div>
                 <div class="field">
-                    <label for="armor-protection-{index}">Proteção:</label>
-                    <input
-                        type="number"
-                        id="armor-protection-{index}"
+                    <label for="armor-protection-{i}">Proteção:</label>
+                    <input 
+                        type="number" 
+                        id="armor-protection-{i}" 
                         bind:value={armor.protection}
-                        on:input={(e) => updateArmor(index, 'protection', parseInt(e.currentTarget.value) || 0)}
+                        on:input={(e) => updateArmor(i, 'protection', parseInt(e.currentTarget.value) || 0)}
                     />
                 </div>
                 <div class="field">
-                    <label for="armor-quality-{index}">Qualidade:</label>
-                    <input
-                        type="text"
-                        id="armor-quality-{index}"
+                    <label for="armor-quality-{i}">Qualidade:</label>
+                    <input 
+                        type="text" 
+                        id="armor-quality-{i}" 
                         bind:value={armor.quality}
-                        on:input={(e) => updateArmor(index, 'quality', e.currentTarget.value)}
+                        on:input={(e) => updateArmor(i, 'quality', e.currentTarget.value)}
                     />
                 </div>
-                <button class="remove-button" on:click={() => removeArmor(index)}>Remover</button>
+                <button class="remove-button" on:click={() => removeArmor(i)}>Remover</button>
             </div>
         {/each}
     </div>
-    {/if}
-</div>
+</Section>
 
 <style>
-    .section {
-        background: #fff;
-        border: 2px solid var(--border-color);
-        border-radius: 0;
-        padding: 20px;
-        margin-bottom: 20px;
-        position: relative;
-    }
-
-    .section::before {
-        content: '';
-        position: absolute;
-        top: 5px;
-        left: 5px;
-        right: 5px;
-        bottom: 5px;
-        border: 1px solid var(--border-color);
-        pointer-events: none;
-    }
-
-    h2 {
-        font-family: var(--header-font);
-        color: var(--primary-color);
-        margin: -20px -20px 20px -20px;
-        padding: 10px 20px;
-        background: var(--background-color);
-        border-bottom: 2px solid var(--border-color);
-        text-transform: uppercase;
-        font-size: 1.2em;
-        text-align: center;
-        letter-spacing: 1px;
-    }
-
     h3 {
         font-family: var(--header-font);
         color: var(--primary-color);

@@ -1,7 +1,6 @@
 <script lang="ts">
     import { character } from '$lib/stores/character';
-
-    let visible = true;
+    import Section from '$lib/components/common/Section.svelte';
 
     function addArtifact() {
         character.update(char => ({
@@ -23,9 +22,7 @@
     }
 </script>
 
-<div class="section artifacts">
-    <h2 on:click={() => (visible = !visible)}>Artefatos e Tesouros Místicos</h2>
-    {#if visible}
+<Section title="Artefatos e Tesouros Místicos">
     <button class="add-button" on:click={addArtifact}>+ Adicionar Artefato</button>
     {#each $character.artifacts as artifact, i}
         <div class="artifact-entry">
@@ -48,43 +45,9 @@
             <button class="remove-button" on:click={() => removeArtifact(i)}>Remover</button>
         </div>
     {/each}
-    {/if}
-</div>
+</Section>
 
 <style>
-    .section {
-        background: #fff;
-        border: 2px solid var(--border-color);
-        border-radius: 0;
-        padding: 20px;
-        margin-bottom: 20px;
-        position: relative;
-    }
-
-    .section::before {
-        content: '';
-        position: absolute;
-        top: 5px;
-        left: 5px;
-        right: 5px;
-        bottom: 5px;
-        border: 1px solid var(--border-color);
-        pointer-events: none;
-    }
-
-    h2 {
-        font-family: var(--header-font);
-        color: var(--primary-color);
-        margin: -20px -20px 20px -20px;
-        padding: 10px 20px;
-        background: var(--background-color);
-        border-bottom: 2px solid var(--border-color);
-        text-transform: uppercase;
-        font-size: 1.2em;
-        text-align: center;
-        letter-spacing: 1px;
-    }
-
     .artifact-entry {
         background: #fff;
         padding: 15px;

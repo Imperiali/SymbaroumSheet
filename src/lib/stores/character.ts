@@ -11,6 +11,16 @@ const createCharacterStore = () => {
         currentExperience: 0,
         shadow: '',
         quote: '',
+        painThreshold: 0,
+        vitality: {
+            current: 10,
+            max: 10
+        },
+        corruption: {
+            current: 0,
+            permanent: 0
+        },
+        corruptionThreshold: 4,
         attributes: {
             accurate: 10,
             cunning: 10,
@@ -21,15 +31,10 @@ const createCharacterStore = () => {
             strong: 10,
             vigilant: 10
         },
-        corruption: {
-            temporary: 0,
-            permanent: 0
-        },
         toughness: {
             base: 10,
             current: 10
         },
-        painThreshold: 0,
         armor: [],
         weapons: [],
         money: {

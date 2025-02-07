@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { character } from '$lib/stores/character';
-
-  let visible = true;
+	import Section from '$lib/components/common/Section.svelte';
 
 	function addEquipment() {
 		character.update((char) => ({
@@ -24,61 +23,24 @@
 	}
 </script>
 
-<div class="section equipment">
-	<h2 on:click={() => (visible = !visible)}>Equipamento</h2>
-  {#if visible}
-
+<Section title="Equipamento">
 	<button class="add-button" on:click={addEquipment}>+ Adicionar Item</button>
 	{#each $character.equipment as item, i}
 		<div class="equipment-entry">
 			<div class="field">
 				<label for="equipment-name-{i}">Nome:</label>
-				<input type="text" id="equipment-name-{i}" bind:value={item.name[i]} />
+				<input type="text" id="equipment-name-{i}" bind:value={item.name} />
 			</div>
 			<div class="field">
-				<label for="equipment-name-{i}">Descrição:</label>
-				<input type="text" id="equipment-description-{i}" bind:value={item.description[i]} />
+				<label for="equipment-description-{i}">Descrição:</label>
+				<input type="text" id="equipment-description-{i}" bind:value={item.description} />
 			</div>
 			<button class="remove-button" on:click={() => removeEquipment(i)}>Remover</button>
 		</div>
 	{/each}
-  {/if}
-</div>
+</Section>
 
 <style>
-	.section {
-		background: #fff;
-		border: 2px solid var(--border-color);
-		border-radius: 0;
-		padding: 20px;
-		margin-bottom: 20px;
-		position: relative;
-	}
-
-	.section::before {
-		content: '';
-		position: absolute;
-		top: 5px;
-		left: 5px;
-		right: 5px;
-		bottom: 5px;
-		border: 1px solid var(--border-color);
-		pointer-events: none;
-	}
-
-	h2 {
-		font-family: var(--header-font);
-		color: var(--primary-color);
-		margin: -20px -20px 20px -20px;
-		padding: 10px 20px;
-		background: var(--background-color);
-		border-bottom: 2px solid var(--border-color);
-		text-transform: uppercase;
-		font-size: 1.2em;
-		text-align: center;
-		letter-spacing: 1px;
-	}
-
 	.equipment-entry {
 		background: #fff;
 		padding: 15px;
