@@ -1,38 +1,40 @@
-# sv
+# Symbaroum Character Sheet
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Uma aplicação web para criar e gerenciar fichas de personagem para o RPG Symbaroum. Desenvolvida com Svelte para proporcionar uma experiência interativa e responsiva.
 
-## Creating a project
+## Funcionalidades
 
-If you're seeing this, you've probably already done this step. Congrats!
+- **Informações Básicas**: Gerenciamento das informações fundamentais do personagem
+- **Atributos**: Controle dos atributos principais do personagem
+- **Combate**: Sistema de gerenciamento de combate
+- **Artefatos**: Controle de itens e artefatos do personagem
 
+## Desenvolvimento
+
+O projeto foi construído utilizando Svelte. Para começar a desenvolver:
+
+1. Clone o repositório
+2. Instale as dependências:
 ```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+npm install
 ```
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
+3. Inicie o servidor de desenvolvimento:
 ```bash
 npm run dev
 
-# or start the server and open the app in a new browser tab
+# ou inicie o servidor e abra o app em uma nova aba do navegador
 npm run dev -- --open
 ```
 
-## Building
+## Construção
 
-To create a production version of your app:
+Para criar uma versão de produção do app:
 
 ```bash
 npm run build
 ```
 
-You can preview the production build with `npm run preview`.
+Você pode prévisualizar a versão de produção com `npm run preview`.
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+> Para fazer o deploy da aplicação, você pode precisar instalar um [adapter](https://svelte.dev/docs/kit/adapters) para seu ambiente de destino.
