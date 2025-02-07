@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,700;1,400&display=swap');
+@import '$lib/styles/variables.css';
+
+:root {
+    --primary-color: #1a1a1a;
+    --secondary-color: #2a2a2a;
+    --accent-color: #8b7355;
+    --background-color: #f4f1ea;
+    --text-color: #1a1a1a;
+    --border-color: #8b7355;
+    --header-font: 'Cinzel', serif;
+    --body-font: 'Crimson Text', serif;
+}
+
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--body-font);
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50l-10-10 10-10 10 10-10 10zm0 0l10 10-10 10-10-10 10-10z' stroke='%238b735520' fill='none' stroke-width='1'/%3E%3C/path%3E%3C/svg%3E");
+}
+
+input, select, textarea {
+    font-family: var(--body-font);
+    font-size: 1em;
+}
+
+/* Estilos globais de formulário */
+input, textarea, select {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+button {
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+/* Utilitários */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
