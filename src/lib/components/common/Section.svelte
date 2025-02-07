@@ -4,7 +4,7 @@
 </script>
 
 <div class="section">
-    <h2 on:click={() => (visible = !visible)}>{title}</h2>
+    <button on:click={() => (visible = !visible)}><h2>{title}</h2></button>
     {#if visible}
         <slot />
     {/if}
