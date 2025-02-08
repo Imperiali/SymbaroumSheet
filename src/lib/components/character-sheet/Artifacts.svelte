@@ -22,29 +22,33 @@
     }
 </script>
 
-<Section title="Artefatos e Tesouros Místicos">
-    <button class="add-button" on:click={addArtifact}>+ Adicionar Artefato</button>
+<Section title="Artefatos e Tesouros Místicos" let:locked>
     {#each $character.artifacts as artifact, i}
         <div class="artifact-entry">
             <div class="field">
                 <label for="artifact-name-{i}">Nome:</label>
-                <input type="text" id="artifact-name-{i}" bind:value={artifact.name} />
+                <input type="text" id="artifact-name-{i}" bind:value={artifact.name} disabled={locked} />
             </div>
             <div class="field">
                 <label for="artifact-powers-{i}">Poderes:</label>
-                <input type="text" id="artifact-powers-{i}" bind:value={artifact.powers} />
+                <input type="text" id="artifact-powers-{i}" bind:value={artifact.powers} disabled={locked} />
             </div>
             <div class="field">
                 <label for="artifact-corruption-{i}">Corrupção:</label>
-                <input type="text" id="artifact-corruption-{i}" bind:value={artifact.corruption} />
+                <input type="text" id="artifact-corruption-{i}" bind:value={artifact.corruption} disabled={locked} />
             </div>
             <div class="field">
                 <label for="artifact-bonus-{i}">Bônus/Efeito:</label>
-                <input type="text" id="artifact-bonus-{i}" bind:value={artifact.bonus} />
+                <input type="text" id="artifact-bonus-{i}" bind:value={artifact.bonus} disabled={locked} />
             </div>
-            <button class="remove-button" on:click={() => removeArtifact(i)}>Remover</button>
+            {#if !locked}
+                <button class="remove-button" on:click={() => removeArtifact(i)}>Remover</button>
+            {/if}
         </div>
     {/each}
+    {#if !locked}
+        <button class="add-button" on:click={addArtifact}>+ Adicionar Artefato</button>
+    {/if}
 </Section>
 
 <style>

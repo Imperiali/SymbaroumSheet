@@ -59,10 +59,12 @@
     }
 </script>
 
-<Section title="Armas e Armadura">
+<Section title="Armas e Armadura" let:locked>
     <div class="subsection weapons">
         <h3>Armas</h3>
-        <button class="add-button" on:click={addWeapon}>+ Adicionar Arma</button>
+        {#if !locked}
+            <button class="add-button" on:click={addWeapon}>+ Adicionar Arma</button>
+        {/if}
         {#each $character.weapons as weapon, i}
             <div class="weapon-entry">
                 <div class="field">
@@ -71,6 +73,7 @@
                         type="text" 
                         id="weapon-name-{i}" 
                         bind:value={weapon.name}
+                        disabled={locked}
                         on:input={(e) => updateWeapon(i, 'name', e.currentTarget.value)}
                     />
                 </div>
@@ -80,6 +83,7 @@
                         type="text" 
                         id="weapon-grace-{i}" 
                         bind:value={weapon.grace}
+                        disabled={locked}
                         on:input={(e) => updateWeapon(i, 'grace', e.currentTarget.value)}
                     />
                 </div>
@@ -89,6 +93,7 @@
                         type="text" 
                         id="weapon-damage-{i}" 
                         bind:value={weapon.damage}
+                        disabled={locked}
                         on:input={(e) => updateWeapon(i, 'damage', e.currentTarget.value)}
                     />
                 </div>
@@ -98,6 +103,7 @@
                         type="text" 
                         id="weapon-quality-{i}" 
                         bind:value={weapon.quality}
+                        disabled={locked}
                         on:input={(e) => updateWeapon(i, 'quality', e.currentTarget.value)}
                     />
                 </div>
@@ -107,10 +113,13 @@
                         type="text" 
                         id="weapon-attribute-{i}" 
                         bind:value={weapon.attribute}
+                        disabled={locked}
                         on:input={(e) => updateWeapon(i, 'attribute', e.currentTarget.value)}
                     />
                 </div>
-                <button class="remove-button" on:click={() => removeWeapon(i)}>Remover</button>
+                {#if !locked}
+                    <button class="remove-button" on:click={() => removeWeapon(i)}>Remover</button>
+                {/if}
             </div>
         {/each}
     </div>
@@ -126,6 +135,7 @@
                         type="text" 
                         id="armor-name-{i}" 
                         bind:value={armor.name}
+                        disabled={locked}
                         on:input={(e) => updateArmor(i, 'name', e.currentTarget.value)}
                     />
                 </div>
@@ -135,6 +145,7 @@
                         type="number" 
                         id="armor-protection-{i}" 
                         bind:value={armor.protection}
+                        disabled={locked}
                         on:input={(e) => updateArmor(i, 'protection', parseInt(e.currentTarget.value) || 0)}
                     />
                 </div>
@@ -144,10 +155,13 @@
                         type="text" 
                         id="armor-quality-{i}" 
                         bind:value={armor.quality}
+                        disabled={locked}
                         on:input={(e) => updateArmor(i, 'quality', e.currentTarget.value)}
                     />
                 </div>
-                <button class="remove-button" on:click={() => removeArmor(i)}>Remover</button>
+                {#if !locked}
+                    <button class="remove-button" on:click={() => removeArmor(i)}>Remover</button>
+                {/if}
             </div>
         {/each}
     </div>

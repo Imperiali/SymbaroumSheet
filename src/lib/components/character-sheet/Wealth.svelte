@@ -3,18 +3,18 @@
     import Section from '$lib/components/common/Section.svelte';
 </script>
 
-<Section title="Riqueza">
+<Section title="Riqueza" let:locked>
     <div class="field">
         <label for="thaler">Thalers:</label>
-        <input type="number" id="thaler" bind:value={$character.money.thaler} min="0" />
+        <input type="number" id="thaler" bind:value={$character.money.thaler} min="0" disabled={locked} />
     </div>
     <div class="field">
         <label for="shilling">Shillings:</label>
-        <input type="number" id="shilling" bind:value={$character.money.shilling} min="0" />
+        <input type="number" id="shilling" bind:value={$character.money.shilling} min="0" disabled={locked} />
     </div>
     <div class="field">
         <label for="orteg">Ortegs:</label>
-        <input type="number" id="orteg" bind:value={$character.money.orteg} min="0" />
+        <input type="number" id="orteg" bind:value={$character.money.orteg} min="0" disabled={locked} />
     </div>
 </Section>
 

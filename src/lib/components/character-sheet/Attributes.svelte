@@ -27,7 +27,7 @@
     ];
 </script>
 
-<Section title="Atributos">
+<Section title="Atributos" let:locked>
     <div class="attributes-grid">
         {#each attributes as { name, label }}
             <div class="attribute">
@@ -39,6 +39,7 @@
                     max="15"
                     bind:value={$character.attributes[name]}
                     on:input={(e) => updateAttribute(name, parseInt(e.currentTarget.value) || 10)}
+                    disabled={locked}
                 />
             </div>
         {/each}

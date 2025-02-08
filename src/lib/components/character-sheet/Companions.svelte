@@ -22,29 +22,33 @@
     }
 </script>
 
-<Section title="Amigos e Companheiros">
-    <button class="add-button" on:click={addCompanion}>+ Adicionar Companheiro</button>
-    {#each $character.companions as companion, i}
+<Section title="Amigos e Companheiros" let:locked>
+    {#each $character.companions as companion, index}
         <div class="companion-entry">
             <div class="field">
-                <label for="companion-name-{i}">Nome:</label>
-                <input type="text" id="companion-name-{i}" bind:value={companion.name} />
+                <label for="companion-name-{index}">Nome:</label>
+                <input type="text" id="companion-name-{index}" bind:value={companion.name} disabled={locked} />
             </div>
             <div class="field">
-                <label for="companion-race-{i}">Raça:</label>
-                <input type="text" id="companion-race-{i}" bind:value={companion.race} />
+                <label for="companion-race-{index}">Raça:</label>
+                <input type="text" id="companion-race-{index}" bind:value={companion.race} disabled={locked} />
             </div>
             <div class="field">
-                <label for="companion-occupation-{i}">Ocupação:</label>
-                <input type="text" id="companion-occupation-{i}" bind:value={companion.occupation} />
+                <label for="companion-occupation-{index}">Ocupação:</label>
+                <input type="text" id="companion-occupation-{index}" bind:value={companion.occupation} disabled={locked} />
             </div>
             <div class="field">
-                <label for="companion-player-{i}">Dinheiro:</label>
-                <input type="text" id="companion-player-{i}" bind:value={companion.player} />
+                <label for="companion-player-{index}">Dinheiro:</label>
+                <input type="text" id="companion-player-{index}" bind:value={companion.player} disabled={locked} />
             </div>
-            <button class="remove-button" on:click={() => removeCompanion(i)}>Remover</button>
+            {#if !locked}
+                <button class="remove-button" on:click={() => removeCompanion(index)}>Remover</button>
+            {/if}
         </div>
     {/each}
+    {#if !locked}
+        <button class="add-button" on:click={addCompanion}>+ Adicionar Companheiro</button>
+    {/if}
 </Section>
 
 <style>

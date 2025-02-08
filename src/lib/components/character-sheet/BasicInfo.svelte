@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { character } from '$lib/stores/character';
 	import Section from '$lib/components/common/Section.svelte';
-	import { onMount } from 'svelte';
 
 	function updateField(field: string, value: string | number) {
 		character.update((char) => ({
@@ -18,10 +17,11 @@
                        '#F44336';
 </script>
 
-<Section title="Informações Básicas">
+<Section title="Informações Básicas" let:locked>
 	<div class="field">
 		<label for="name">Nome:</label>
 		<input
+            disabled={locked}
 			type="text"
 			id="name"
 			bind:value={$character.name}
@@ -31,6 +31,7 @@
     <div class="field">
         <label for="race">Raça:</label>
         <input
+            disabled={locked}
             type="text"
             id="race"
             bind:value={$character.race}
@@ -40,6 +41,7 @@
     <div class="field">
         <label for="occupation">Ocupação:</label>
         <input
+            disabled={locked}
             type="text"
             id="occupation"
             bind:value={$character.occupation}
@@ -53,6 +55,7 @@
         <div class="field-container">
             <label for="current-experience">Disponível:</label>
             <input
+                disabled={locked}
                 type="number"
                 id="current-xperience"
                 bind:value={$character.currentExperience}
@@ -62,6 +65,7 @@
         <div class="field-container">
             <label for="experience">Total:</label>
             <input
+                disabled={locked}
                 type="number"
                 id="experience"
                 bind:value={$character.experience}
@@ -72,6 +76,7 @@
     <div class="field">
         <label for="shadow">Sombra:</label>
         <input
+            disabled={locked}
             type="text"
             id="shadow"
             bind:value={$character.shadow}
@@ -90,6 +95,7 @@
     <div class="field">
         <label for="painThreshold">Limiar de Dor:</label>
         <input
+            disabled={locked}
             type="number"
             id="painThreshold"
             bind:value={$character.painThreshold}
@@ -110,6 +116,7 @@
                 <div class="field-container">
                     <label for="currentVitality">Atual:</label>
                     <input
+                        disabled={locked}
                         type="number"
                         id="currentVitality"
                         bind:value={$character.vitality.current}
@@ -127,6 +134,7 @@
                 <div class="field-container">
                     <label for="maxVitality">Máxima:</label>
                     <input
+                        disabled={locked}
                         type="number"
                         id="maxVitality"
                         bind:value={$character.vitality.max}
@@ -151,6 +159,7 @@
             <div class="field-container">
                 <label for="currentCorruption">Atual:</label>
                 <input
+                    disabled={locked}
                     type="number"
                     id="currentCorruption"
                     bind:value={$character.corruption.current}
@@ -168,6 +177,7 @@
             <div class="field-container">
                 <label for="permanentCorruption">Permanente:</label>
                 <input
+                    disabled={locked}
                     type="number"
                     id="permanentCorruption"
                     bind:value={$character.corruption.permanent}
@@ -188,6 +198,7 @@
     <div class="field">
         <label for="corruptionThreshold">Limiar de Corrupção:</label>
         <input
+            disabled={locked}
             type="number"
             id="corruptionThreshold"
             bind:value={$character.corruptionThreshold}

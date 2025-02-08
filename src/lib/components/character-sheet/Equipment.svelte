@@ -23,25 +23,43 @@
 	}
 </script>
 
-<Section title="Equipamento">
-	<button class="add-button" on:click={addEquipment}>+ Adicionar Item</button>
-	{#each $character.equipment as item, i}
-		<div class="equipment-entry">
+<Section title="Equipamento" let:locked>
+	{#each $character.equipment as item, index}
+		<div class="equipment-item">
 			<div class="field">
-				<label for="equipment-name-{i}">Nome:</label>
-				<input type="text" id="equipment-name-{i}" bind:value={item.name} />
+				<label for="equipment-name-{index}">Nome:</label>
+				<input
+					type="text"
+					id="equipment-name-{index}"
+					bind:value={item.name}
+					disabled={locked}
+				/>
 			</div>
 			<div class="field">
-				<label for="equipment-description-{i}">Descrição:</label>
-				<input type="text" id="equipment-description-{i}" bind:value={item.description} />
+				<label for="equipment-description-{index}">Descrição:</label>
+				<textarea
+					id="equipment-description-{index}"
+					bind:value={item.description}
+					disabled={locked}
+				/>
 			</div>
-			<button class="remove-button" on:click={() => removeEquipment(i)}>Remover</button>
+			{#if !locked}
+				<button class="remove-btn" on:click={() => removeEquipment(index)}>
+					<span class="material-icons">delete</span>
+				</button>
+			{/if}
 		</div>
 	{/each}
+	{#if !locked}
+		<button class="add-btn" on:click={addEquipment}>
+			<span class="material-icons">add</span>
+			Adicionar Equipamento
+		</button>
+	{/if}
 </Section>
 
 <style>
-	.equipment-entry {
+	.equipment-item {
 		background: #fff;
 		padding: 15px;
 		margin: 10px 0;
@@ -79,7 +97,23 @@
 		box-shadow: 0 0 5px rgba(139, 115, 85, 0.2);
 	}
 
-	.add-button {
+	textarea {
+		padding: 8px;
+		border: 1px solid var(--border-color);
+		border-radius: 0;
+		flex: 1;
+		background: #fff;
+		color: var(--text-color);
+		resize: vertical;
+	}
+
+	textarea:focus {
+		outline: none;
+		border-color: var(--accent-color);
+		box-shadow: 0 0 5px rgba(139, 115, 85, 0.2);
+	}
+
+	.add-btn {
 		background: var(--accent-color);
 		color: white;
 		border: none;
@@ -93,7 +127,7 @@
 		transition: all 0.2s ease;
 	}
 
-	.remove-button {
+	.remove-btn {
 		background: #8b3535;
 		color: white;
 		border: none;
@@ -104,11 +138,11 @@
 		transition: all 0.2s ease;
 	}
 
-	.add-button:hover {
+	.add-btn:hover {
 		background: #6b5642;
 	}
 
-	.remove-button:hover {
+	.remove-btn:hover {
 		background: #6b2828;
 	}
 </style>
