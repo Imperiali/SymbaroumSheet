@@ -7,6 +7,13 @@ export type Character = {
     currentExperience: number;
     shadow: string;
     quote: string;
+    idade?: string;      // Optional age field
+    altura?: string;     // Optional height field
+    peso?: string;       // Optional weight field
+    aparencia?: string;  // Optional appearance field
+    historico?: string;  // Optional background field
+    objetivoPessoal?: string; // Optional personal goal field
+    imagemUrl?: string;  // Optional character image URL
     painThreshold: number;
     vitality: {
         current: number;
