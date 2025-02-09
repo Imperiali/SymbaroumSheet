@@ -182,6 +182,7 @@
         border-radius: 8px;
         overflow: hidden;
         position: relative;
+        min-height: 300px;
     }
 
     .image-wrapper {
@@ -200,26 +201,20 @@
         background: rgba(0, 0, 0, 0.5);
         border: none;
         color: white;
-        cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0;
+        cursor: pointer;
         transition: background-color 0.2s;
     }
 
-    .reset-btn:hover:not(:disabled) {
+    .reset-btn:hover {
         background: rgba(0, 0, 0, 0.7);
     }
 
     .reset-btn:disabled {
-        opacity: 0.5;
-    }
-
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+        background: rgba(0, 0, 0, 0.3);
+        cursor: not-allowed;
     }
 
     .image-placeholder {
@@ -229,5 +224,91 @@
         align-items: center;
         justify-content: center;
         padding: 1rem;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    @media (max-width: 768px) {
+        .personal-info {
+            grid-template-columns: 1fr;
+        }
+
+        .info-row {
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+        }
+
+        .field {
+            margin-bottom: 0.75rem;
+        }
+
+        textarea {
+            min-height: 60px;
+        }
+
+        .image-container {
+            min-height: 200px;
+        }
+
+        label {
+            font-size: 0.75rem;
+        }
+
+        input, textarea {
+            padding: 0.4rem;
+            font-size: 0.9em;
+        }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .personal-info {
+            grid-template-columns: 1fr 250px;
+        }
+
+        .info-row {
+            gap: 0.75rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .personal-info {
+            gap: 0.75rem;
+        }
+
+        .info-fields {
+            gap: 0.75rem;
+        }
+
+        .field {
+            margin-bottom: 0.5rem;
+        }
+
+        textarea {
+            min-height: 50px;
+        }
+
+        .image-container {
+            min-height: 150px;
+        }
+
+        label {
+            font-size: 0.7rem;
+        }
+
+        input, textarea {
+            padding: 0.35rem;
+            font-size: 0.85em;
+        }
+
+        .reset-btn {
+            width: 28px;
+            height: 28px;
+            top: 4px;
+            right: 4px;
+        }
     }
 </style>

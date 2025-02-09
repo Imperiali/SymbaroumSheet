@@ -31,20 +31,25 @@
     <div class="save-status" class:visible={saveStatus !== ''}>
         {saveStatus}
     </div>
-
-    <div class="page left-page">
+    
+    <div class="page full">
         <BasicInfo />
-        <Personal />
-        <Attributes />
-        <Combat />
-        <AbilitiesAndPowers abilities={$character?.abilities ?? []} />
     </div>
 
-    <div class="page right-page">
-        <Companions />
-        <Artifacts />
-        <Equipment />
-        <Wealth />
+    <div class="page-container">
+        <div class="page left-page">
+            <Personal />
+            <Attributes />
+            <Combat />
+            <AbilitiesAndPowers abilities={$character?.abilities ?? []} />
+        </div>
+
+        <div class="page right-page">
+            <Companions />
+            <Artifacts />
+            <Equipment />
+            <Wealth />
+        </div>
     </div>
 </div>
 
@@ -52,6 +57,7 @@
     .character-sheet {
         display: flex;
         gap: 40px;
+        flex-wrap: wrap;
         max-width: 1200px;
         margin: 0 auto;
         padding: 20px;
@@ -59,6 +65,13 @@
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         border: 1px solid var(--border-color);
         border-radius: 8px;
+    }
+
+    .full {
+        flex: 2;
+        align-self: flex-start;
+        width: 100%;
+        margin-bottom: 1rem;
     }
 
     .page {
@@ -100,15 +113,45 @@
         transform: translateY(0);
     }
 
+    .page-container {
+        display: flex;
+        gap: 1rem;
+        width: 100%;
+    }
+
     @media (max-width: 1200px) {
         .character-sheet {
             flex-direction: column;
             gap: 20px;
+            padding: 12px;
+            margin: 0;
+            border-radius: 0;
         }
 
         .page::before {
             left: 0;
             right: 0;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .page-container {
+            flex-direction: column;
+        }
+
+        .page {
+            width: 100%;
+        }
+
+        .character-sheet {
+            padding: 8px;
+        }
+
+        .save-status {
+            top: 10px;
+            right: 10px;
+            padding: 8px 16px;
+            font-size: 0.9em;
         }
     }
 </style>
