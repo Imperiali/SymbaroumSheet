@@ -41,11 +41,12 @@
 					id="equipment-description-{index}"
 					bind:value={item.description}
 					disabled={locked}
-				/>
+				></textarea>
 			</div>
 			{#if !locked}
 				<button class="remove-btn" on:click={() => removeEquipment(index)}>
 					<span class="material-icons">delete</span>
+					Remover
 				</button>
 			{/if}
 		</div>
@@ -114,6 +115,9 @@
 	}
 
 	.add-btn {
+		display: flex;
+		align-items: center;
+		gap: 8px;
 		background: var(--accent-color);
 		color: white;
 		border: none;
@@ -136,6 +140,9 @@
 		font-family: var(--header-font);
 		font-size: 0.8em;
 		transition: all 0.2s ease;
+		display: flex;
+		align-items: center;
+		gap: 8px;
 	}
 
 	.add-btn:hover {

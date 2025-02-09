@@ -8,6 +8,7 @@
     import Artifacts from './Artifacts.svelte';
     import Equipment from './Equipment.svelte';
     import Wealth from './Wealth.svelte';
+    import AbilitiesAndPowers from './AbilitiesAndPowers.svelte';
 
     let saveStatus = '';
 
@@ -34,6 +35,7 @@
         <BasicInfo />
         <Attributes />
         <Combat />
+        <AbilitiesAndPowers abilities={$character?.abilities ?? []} />
     </div>
 
     <div class="page right-page">

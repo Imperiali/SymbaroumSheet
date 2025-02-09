@@ -118,7 +118,10 @@
                     />
                 </div>
                 {#if !locked}
-                    <button class="remove-button" on:click={() => removeWeapon(i)}>Remover</button>
+                    <button class="remove-button" on:click={() => removeWeapon(i)}>
+                        <span class="material-icons">delete</span>
+                        Remover
+                    </button>
                 {/if}
             </div>
         {/each}
@@ -160,7 +163,10 @@
                     />
                 </div>
                 {#if !locked}
-                    <button class="remove-button" on:click={() => removeArmor(i)}>Remover</button>
+                    <button class="remove-button" on:click={() => removeArmor(i)}>
+                        <span class="material-icons">delete</span>
+                        Remover
+                    </button>
                 {/if}
             </div>
         {/each}
@@ -243,6 +249,9 @@
     }
 
     .remove-button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
         background: #8b3535;
         color: white;
         border: none;

@@ -65,8 +65,9 @@ export type Character = {
     // Habilidades e Poderes
     abilities: Array<{
         name: string;
-        level: number;
         effect: string;
+        type: string;
+        classification: 'N' | 'A' | 'M';
     }>;
 
     // Amigos e Companheiros
