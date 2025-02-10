@@ -2,7 +2,7 @@ export type Character = {
     // Informações Básicas
     name: string;
     race: string;
-    occupation: string;
+    occupation?: string;
     experience: number;
     currentExperience: number;
     shadow: string;
@@ -91,5 +91,10 @@ export type Character = {
         powers: string;
         corruption: string;
         bonus: string;
+    }>;
+
+    notes: Array<{
+        title: string;
+        description: string;
     }>;
 };
