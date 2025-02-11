@@ -16,7 +16,7 @@
 			? ($character.vitality.current / $character.vitality.max) * 100
 			: 0;
 	$: vitalityColor =
-		vitalityPercentage > 50 ? '#4CAF50' : vitalityPercentage > 30 ? '#FFC107' : '#F44336';
+		vitalityPercentage > 50 ? '#33691E' : vitalityPercentage > 30 ? '#FFB74D' : '#B71C1C';
 </script>
 
 <Section title="Informações Básicas" let:locked>
@@ -45,9 +45,29 @@
 
 		<div class="field multiple vitality-field">
 			<div class="header-container">
-				<span class="material-icons">chevron_left</span>
+        <button on:click={() => {
+          character.update((char) => ({
+            ...char,
+            vitality: {
+              ...char.vitality,
+              current: (char.vitality.current - 1) || 0
+            }
+          }));
+        }}>
+          <span class="material-icons">chevron_left</span>
+        </button>
 				<span>Vitalidade</span>
+        <button on:click={() => {
+          character.update((char) => ({
+            ...char,
+            vitality: {
+              ...char.vitality,
+              current: (char.vitality.current + 1) || 0
+            }
+          }));
+        }}>
 				<span class="material-icons">chevron_right</span>
+        </button>
 			</div>
 			<div class="vitality-container">
 				<div class="vitality-bar">
@@ -336,7 +356,7 @@
 	.basic-info-grid {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		gap: 1.5rem;
+		gap: .5rem 1.5rem;
 		padding: 1rem;
 		max-width: 1200px;
 		margin: 0 auto;
@@ -395,7 +415,6 @@
 	/* Field Styling */
 	.vitality-field,
 	.corruption-field,
-	.threshold-container,
 	.exp-field {
 		background-color: rgba(0, 0, 0, 0.02);
 		padding: 1rem;
@@ -421,6 +440,10 @@
 		span {
 			min-width: 50px;
 		}
+
+    button {
+      width: fit-content;
+    }
 	}
 
 	.subsection {
@@ -447,7 +470,7 @@
 	@media (max-width: 768px) {
 		.basic-info-grid {
 			grid-template-columns: 1fr;
-			gap: 1rem;
+			gap: .5rem 1rem;
 			padding: 0.5rem;
 		}
 
@@ -511,7 +534,7 @@
 	@media (max-width: 480px) {
 		.basic-info-grid {
 			padding: 0.25rem;
-			gap: 0.75rem;
+			gap: .5rem 0.75rem;
 		}
 
 		input,

@@ -19,13 +19,6 @@ const createToastStore = () => {
         return updated;
       });
     },
-    // update: (toast: Array<Toast>) => {
-    //   update(toasts => {
-    //     const updated = toasts;
-    //     storageService.saveToast(updated);
-    //     return toast;
-    //   });
-    // },
     reset: () => {
       storageService.saveToast([]);
     },
