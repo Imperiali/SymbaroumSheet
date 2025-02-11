@@ -139,5 +139,9 @@
 			grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 			gap: 15px;
 		}
+
+    label {
+		font-size: 0.75em;
+    }
 	}
 </style>
