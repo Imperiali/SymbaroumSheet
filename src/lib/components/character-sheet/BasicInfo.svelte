@@ -2,6 +2,8 @@
 	import { character } from '$lib/stores/character';
 	import Section from '$lib/components/common/Section.svelte';
 
+	let visible = true;
+
 	function updateField(field: string, value: string | number) {
 		character.update((char) => ({
 			...char,
@@ -30,8 +32,23 @@
 			/>
 		</div>
 
+		<div class="field occupation-field">
+			<label for="occupation">Ocupação:</label>
+			<input
+				disabled={locked}
+				type="text"
+				id="occupation"
+				bind:value={$character.occupation}
+				on:input={(e) => updateField('occupation', e.currentTarget.value)}
+			/>
+		</div>
+
 		<div class="field multiple vitality-field">
-			<span>Vitalidade</span>
+			<div class="header-container">
+				<span class="material-icons">chevron_left</span>
+				<span>Vitalidade</span>
+				<span class="material-icons">chevron_right</span>
+			</div>
 			<div class="vitality-container">
 				<div class="vitality-bar">
 					<div
@@ -76,44 +93,43 @@
 							}}
 						/>
 					</div>
+					<div class="field-container">
+						<label for="painThreshold">Limiar:</label>
+						<input
+							disabled={locked}
+							type="number"
+							id="painThreshold"
+							bind:value={$character.painThreshold}
+							on:input={(e) => updateField('painThreshold', parseInt(e.currentTarget.value) || 0)}
+						/>
+					</div>
 				</div>
 			</div>
 		</div>
-
-		<div class="field shadow-field">
-			<label for="shadow">Sombra:</label>
-			<input
-				disabled={locked}
-				type="text"
-				id="shadow"
-				bind:value={$character.shadow}
-				on:input={(e) => updateField('shadow', e.currentTarget.value)}
-			/>
+		<div class="field multiple exp-field">
+			<span>Experiência</span>
+			<div class="field-container">
+				<input
+					disabled={locked}
+					type="number"
+					id="current-experience"
+					bind:value={$character.currentExperience}
+					on:input={(e) => updateField('currentExperience', parseInt(e.currentTarget.value) || 0)}
+				/>
+				<label class="text-left" for="current-experience">Disponível</label>
+			</div>
+			<div class="field-container">
+				<input
+					disabled={locked}
+					type="number"
+					id="experience"
+					bind:value={$character.experience}
+					on:input={(e) => updateField('experience', parseInt(e.currentTarget.value) || 0)}
+				/>
+				<label class="text-left" for="experience">Total</label>
+			</div>
 		</div>
-
-		<div class="field race-field">
-			<label for="race">Raça:</label>
-			<input
-				disabled={locked}
-				type="text"
-				id="race"
-				bind:value={$character.race}
-				on:input={(e) => updateField('race', e.currentTarget.value)}
-			/>
-		</div>
-
-		<div class="field occupation-field">
-			<label for="occupation">Ocupação:</label>
-			<input
-				disabled={locked}
-				type="text"
-				id="occupation"
-				bind:value={$character.occupation}
-				on:input={(e) => updateField('occupation', e.currentTarget.value)}
-			/>
-		</div>
-
-		<div class="field threshold-container">
+		<!-- <div class="field threshold-container">
 			<span>Limiar</span>
 			<div class="field-container">
 				<label for="painThreshold">Dor:</label>
@@ -125,17 +141,8 @@
 					on:input={(e) => updateField('painThreshold', parseInt(e.currentTarget.value) || 0)}
 				/>
 			</div>
-			<div class="field-container">
-				<label for="corruptionThreshold">Corrupção:</label>
-				<input
-					disabled={locked}
-					type="number"
-					id="corruptionThreshold"
-					bind:value={$character.corruptionThreshold}
-					on:input={(e) => updateField('corruptionThreshold', parseInt(e.currentTarget.value) || 0)}
-				/>
-			</div>
-		</div>
+			
+		</div> -->
 
 		<div class="field multiple corruption-field">
 			<span>Corrupção</span>
@@ -176,45 +183,73 @@
 						}}
 					/>
 				</div>
+        <div class="field-container">
+          <label for="corruptionThreshold">Limiar:</label>
+          <input
+            disabled={locked}
+            type="number"
+            id="corruptionThreshold"
+            bind:value={$character.corruptionThreshold}
+            on:input={(e) => updateField('corruptionThreshold', parseInt(e.currentTarget.value) || 0)}
+          />
+        </div>
 			</div>
 		</div>
 
-		<div class="field multiple exp-field">
-			<span>Experiência</span>
-			<div class="field-container">
-				<input
-					disabled={locked}
-					type="number"
-					id="current-experience"
-					bind:value={$character.currentExperience}
-					on:input={(e) => updateField('currentExperience', parseInt(e.currentTarget.value) || 0)}
-				/>
-				<label class="text-left" for="current-experience">Disponível</label>
-			</div>
-			<div class="field-container">
-				<input
-					disabled={locked}
-					type="number"
-					id="experience"
-					bind:value={$character.experience}
-					on:input={(e) => updateField('experience', parseInt(e.currentTarget.value) || 0)}
-				/>
-				<label class="text-left" for="experience">Total</label>
-			</div>
-		</div>
+		<div class="subsection">
+			<button class="toggle-btn" on:click={() => (visible = !visible)}
+				><h3>Informações Adicionais</h3></button
+			>
+			{#if visible}
+				<div class="field race-field">
+					<label for="race">Raça:</label>
+					<input
+						disabled={locked}
+						type="text"
+						id="race"
+						bind:value={$character.race}
+						on:input={(e) => updateField('race', e.currentTarget.value)}
+					/>
+				</div>
 
-		<div class="field quote-field">
-			<label for="quote">Citação:</label>
-			<textarea
-				id="quote"
-				bind:value={$character.quote}
-				on:input={(e) => updateField('quote', e.currentTarget.value)}
-			></textarea>
+				<div class="field shadow-field">
+					<label for="shadow">Sombra:</label>
+					<input
+						disabled={locked}
+						type="text"
+						id="shadow"
+						bind:value={$character.shadow}
+						on:input={(e) => updateField('shadow', e.currentTarget.value)}
+					/>
+				</div>
+				<div class="field quote-field">
+					<label for="quote">Citação:</label>
+					<textarea
+						id="quote"
+						bind:value={$character.quote}
+						on:input={(e) => updateField('quote', e.currentTarget.value)}
+					></textarea>
+				</div>
+			{/if}
 		</div>
 	</div>
 </Section>
 
 <style>
+	.toggle-btn {
+		background: none;
+		border: none;
+		padding: 0;
+		cursor: pointer;
+		width: 100%;
+	}
+
+	.toggle-btn:disabled {
+		cursor: not-allowed;
+	}
+	.toggle-btn:hover h3 {
+		background: var(--hover-color, #f5f5f5);
+	}
 	.field {
 		display: flex;
 		flex-direction: column;
@@ -261,8 +296,9 @@
 		width: 100%;
 		height: 20px;
 		background-color: #e0e0e0;
-		border-radius: 10px;
+		border-radius: 3px;
 		overflow: hidden;
+		border: 1px solid var(--border-color);
 	}
 
 	.vitality-progress {
@@ -290,7 +326,7 @@
 
 	label {
 		font-weight: 500;
-		min-width: 80px;
+		/* min-width: 80px; */
 	}
 
 	.field-container .text-left {
@@ -308,13 +344,13 @@
 
 	/* Grid Layout */
 	.player-name {
-		grid-column: 1;
+		grid-column: 1 / span 2;
 		grid-row: 1;
 	}
 
 	.vitality-field {
-		grid-column: 2;
-		grid-row: 1 / 3;
+		grid-column: 1 / span 3;
+		grid-row: 2;
 		align-self: center;
 	}
 
@@ -329,25 +365,25 @@
 	}
 
 	.occupation-field {
-		grid-column: 3;
-		grid-row: 2;
+		grid-column: 3 / span 2;
+		grid-row: 1;
 	}
 
 	.corruption-field {
-		grid-column: 2;
-		grid-row: 3 / 5;
+		grid-column: 4 / span 3;
+		grid-row: 2;
 		align-self: center;
 	}
 
-	.threshold-container {
+	/* .threshold-container {
 		grid-column: 1;
-		grid-row: 3 / 5;
+		grid-row: 2;
 		align-items: end;
-	}
+	} */
 
 	.exp-field {
-		grid-column: 3;
-		grid-row: 3 / 5;
+		grid-column: 5 / span 2;
+		grid-row: 1;
 		align-items: start;
 	}
 
@@ -376,6 +412,37 @@
 		text-align: right;
 	}
 
+	.header-container {
+		display: flex;
+		width: 100%;
+		justify-content: space-between;
+		align-items: center;
+
+		span {
+			min-width: 50px;
+		}
+	}
+
+	.subsection {
+		margin: 8px 0;
+		padding: 15px;
+		background: #fff;
+		border: 1px solid var(--border-color);
+		position: relative;
+		order: 5;
+		grid-row: 4;
+    grid-column: 1 / span 6 ;
+
+		h3 {
+			font-family: var(--header-font);
+			color: var(--primary-color);
+			margin-bottom: 15px;
+			font-size: 1.1em;
+			border-bottom: 1px solid var(--border-color);
+			padding-bottom: 5px;
+		}
+	}
+
 	/* Responsive adjustments */
 	@media (max-width: 768px) {
 		.basic-info-grid {
@@ -384,7 +451,7 @@
 			padding: 0.5rem;
 		}
 
-		.field {
+		.field, .subsection {
 			grid-column: 1 !important;
 			grid-row: auto !important;
 		}
@@ -421,6 +488,24 @@
 			font-size: 1em;
 			margin-bottom: 0.25rem;
 		}
+
+		.exp-field,
+		.vitality-field,
+		.threshold-container {
+			text-align: center;
+			span {
+				width: 100%;
+			}
+		}
+		.field-container {
+			label {
+				text-align: right;
+			}
+		}
+
+    .subsection {
+      grid-column: 1;
+    }
 	}
 
 	@media (max-width: 480px) {
@@ -453,17 +538,20 @@
 			order: 0;
 		}
 		.vitality-field,
-		.threshold-container,
 		.corruption-field {
-			order: 2;
+			order: 0;
+      grid-row: 2;
+      grid-column: 1;
 		}
 
-		.shadow-field,
+
 		.occupation-field {
-			order: 3;
+			order: 0;
 		}
-		.quote-field {
-			order: 4;
-		}
+
+    .subsection {
+      order: 4;
+      grid-row: 5;
+    }
 	}
 </style>

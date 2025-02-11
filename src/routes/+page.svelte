@@ -1,9 +1,11 @@
 <script lang="ts">
     import CharacterSheet from '$lib/components/character-sheet/CharacterSheet.svelte';
+	import Toasts from '$lib/components/common/Toasts.svelte';
 </script>
 
 <main>
     <h1>Ficha de Personagem Symbaroum</h1>
+    <Toasts />
     <CharacterSheet />
 </main>
 

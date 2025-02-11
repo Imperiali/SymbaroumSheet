@@ -18,7 +18,7 @@
 	function removeNote(index: number) {
 		character.update((char) => ({
 			...char,
-			note: char.notes.filter((_, i) => i !== index)
+			notes: char.notes.filter((_, i) => i !== index)
 		}));
 	}
 </script>
@@ -70,6 +70,7 @@
 
 	.field {
 		display: flex;
+    flex-direction: column;
 		margin-bottom: 12px;
 		align-items: center;
 	}
@@ -151,5 +152,19 @@
 
 	.remove-btn:hover {
 		background: #6b2828;
+	}
+  @media (max-width: 480px) {
+    label {
+      font-size: .75rem;
+    }
+  }
+
+	@media (max-width: 480px) {
+		label {
+			font-size: 0.7rem;
+		}
+    .field {
+    align-items: flex-start;
+    }
 	}
 </style>

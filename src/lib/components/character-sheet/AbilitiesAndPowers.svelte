@@ -1,6 +1,5 @@
 <script lang="ts">
     import Section from "$lib/components/common/Section.svelte";
-    import type { Character } from "$lib/types/character";
     import { character } from '$lib/stores/character';
 
     export const abilities: { name: string; effect: string; type: string; classification: "N" | "A" | "M"; }[] = [];
