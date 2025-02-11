@@ -37,7 +37,6 @@ const createToastStore = () => {
     },
     delete: (toast: Toast) => {
       const saved = storageService.loadToast();
-      console.log('delete', saved);
       if (saved == null) return;
       const updated = saved!.filter((t) => t.id != toast.id)
       storageService.saveToast(updated);
@@ -45,7 +44,6 @@ const createToastStore = () => {
     },
     add: (toast: Toast) => {
       const saved = storageService.loadToast();
-      console.log('add', saved);
       if (saved == null) {
         storageService.saveToast([toast]);
         return;
