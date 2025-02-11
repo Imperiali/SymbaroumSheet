@@ -1,6 +1,17 @@
 <script lang="ts">
 	import { character } from '$lib/stores/character';
 	import Section from '$lib/components/common/Section.svelte';
+	import { getRaces, type Race } from '$lib/types/race';
+	import { getOccupations, type Occupation } from '$lib/types/occupation';
+	import { onMount } from 'svelte';
+
+	let races: Race[] = [];
+	let occupations: Occupation[] = [];
+
+	onMount(async () => {
+		races = await getRaces();
+		occupations = await getOccupations();
+	});
 
 	function updateField(field: string, value: string | number) {
 		character.update((char) => ({
@@ -103,28 +114,134 @@
         />
     </div>
 
-    <div class="field multiple">
-        <span>Vitalidade</span>
-        <div class="vitality-container">
-            <div class="vitality-bar">
-                <div 
-                    class="vitality-progress" 
-                    style="width: {vitalityPercentage}%; background-color: {vitalityColor};"
-                ></div>
+        <div class="field multiple vitality-field">
+            <span>Vitalidade</span>
+            <div class="vitality-container">
+                <div class="vitality-bar">
+                    <div 
+                        class="vitality-progress" 
+                        style="width: {vitalityPercentage}%; background-color: {vitalityColor};"
+                    ></div>
+                </div>
+                <div class="vitality-fields-container">
+                    <div class="field-container">
+                        <label for="currentVitality">Atual:</label>
+                        <input
+                            disabled={locked}
+                            type="number"
+                            id="currentVitality"
+                            bind:value={$character.vitality.current}
+                            on:input={(e) => {
+                                character.update((char) => ({
+                                    ...char,
+                                    vitality: {
+                                        ...char.vitality,
+                                        current: parseInt(e.currentTarget.value) || 0
+                                    }
+                                }));
+                            }}
+                        />
+                    </div>
+                    <div class="field-container">
+                        <label for="maxVitality">Máxima:</label>
+                        <input
+                            disabled={locked}
+                            type="number"
+                            id="maxVitality"
+                            bind:value={$character.vitality.max}
+                            on:input={(e) => {
+                                character.update((char) => ({
+                                    ...char,
+                                    vitality: {
+                                        ...char.vitality,
+                                        max: parseInt(e.currentTarget.value) || 0
+                                    }
+                                }));
+                            }}
+                        />
+                    </div>
+                </div>
             </div>
-            <div class="vitality-fields-container">
+        </div>
+
+        <div class="field race-field">
+            <label for="race">Raça:</label>
+            <select
+                id="race"
+                bind:value={$character.race}
+                on:change={(e) => updateField('race', e.currentTarget.value)}
+                disabled={locked}
+            >
+                {#each races as race}
+                    <option value={race.id}>{race.name}</option>
+                {/each}
+            </select>
+        </div>
+
+        <div class="field occupation-field">
+            <label for="occupation">Ocupação:</label>
+            <select
+                id="occupation"
+                bind:value={$character.occupation}
+                on:change={(e) => updateField('occupation', e.currentTarget.value)}
+                disabled={locked}
+            >
+                {#each occupations as occupation}
+                    <option value={occupation.id}>{occupation.name}</option>
+                {/each}
+            </select>
+        </div>
+
+        <div class="field shadow-field">
+            <label for="shadow">Sombra:</label>
+            <input
+                disabled={locked}
+                type="text"
+                id="shadow"
+                bind:value={$character.shadow}
+                on:input={(e) => updateField('shadow', e.currentTarget.value)}
+            />
+        </div>
+
+        <div class="field threshold-container">
+            <span>Limiar</span>
+            <div class="field-container">
+                <label for="painThreshold">Dor:</label>
+                <input
+                    disabled={locked}
+                    type="number"
+                    id="painThreshold"
+                    bind:value={$character.painThreshold}
+                    on:input={(e) => updateField('painThreshold', parseInt(e.currentTarget.value) || 0)}
+                />
+            </div>
+            <div class="field-container">
+                <label for="corruptionThreshold">Corrupção:</label>
+                <input
+                    disabled={locked}
+                    type="number"
+                    id="corruptionThreshold"
+                    bind:value={$character.corruptionThreshold}
+                    on:input={(e) => updateField('corruptionThreshold', parseInt(e.currentTarget.value) || 0)}
+                />
+            </div>
+        </div>
+
+        <div class="field multiple corruption-field">
+            <span>Corrupção</span>
+            <div class="corruption-container">
                 <div class="field-container">
-                    <label for="currentVitality">Atual:</label>
+                    <label for="currentCorruption">Atual:</label>
                     <input
                         disabled={locked}
                         type="number"
-                        id="currentVitality"
-                        bind:value={$character.vitality.current}
+                        id="currentCorruption"
+                        bind:value={$character.corruption.current}
                         on:input={(e) => {
                             character.update((char) => ({
                                 ...char,
-                                vitality: {
-                                    ...char.vitality,
+                                corruption: {
+                                    ...char.corruption,
                                     current: parseInt(e.currentTarget.value) || 0
                                 }
                             }));
@@ -132,18 +249,18 @@
                     />
                 </div>
                 <div class="field-container">
-                    <label for="maxVitality">Máxima:</label>
+                    <label for="permanentCorruption">Permanente:</label>
                     <input
                         disabled={locked}
                         type="number"
-                        id="maxVitality"
-                        bind:value={$character.vitality.max}
+                        id="permanentCorruption"
+                        bind:value={$character.corruption.permanent}
                         on:input={(e) => {
                             character.update((char) => ({
                                 ...char,
-                                vitality: {
-                                    ...char.vitality,
-                                    max: parseInt(e.currentTarget.value) || 0
+                                corruption: {
+                                    ...char.corruption,
+                                    permanent: parseInt(e.currentTarget.value) || 0
                                 }
                             }));
                         }}
@@ -151,49 +268,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="field multiple">
-        <span>Corrupção</span>
-        <div class="corruption-container">
-            <div class="field-container">
-                <label for="currentCorruption">Atual:</label>
-                <input
-                    disabled={locked}
-                    type="number"
-                    id="currentCorruption"
-                    bind:value={$character.corruption.current}
-                    on:input={(e) => {
-                        character.update((char) => ({
-                            ...char,
-                            corruption: {
-                                ...char.corruption,
-                                current: parseInt(e.currentTarget.value) || 0
-                            }
-                        }));
-                    }}
-                />
-            </div>
-            <div class="field-container">
-                <label for="permanentCorruption">Permanente:</label>
-                <input
-                    disabled={locked}
-                    type="number"
-                    id="permanentCorruption"
-                    bind:value={$character.corruption.permanent}
-                    on:input={(e) => {
-                        character.update((char) => ({
-                            ...char,
-                            corruption: {
-                                ...char.corruption,
-                                permanent: parseInt(e.currentTarget.value) || 0
-                            }
-                        }));
-                    }}
-                />
-            </div>
-        </div>
-    </div>
 
     <div class="field">
         <label for="corruptionThreshold">Limiar de Corrupção:</label>
@@ -269,16 +343,48 @@
         margin-bottom: 8px;
     }
 
-    .vitality-progress {
-        height: 100%;
-        transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
-    }
+	.vitality-progress {
+		height: 100%;
+		transition: width 0.3s ease;
+	}
 
-    .field-container {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
+	input, textarea, select {
+		padding: 0.5rem;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		width: 100%;
+		background-color: white;
+	}
+
+	select {
+		cursor: pointer;
+		appearance: none;
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8.825L1.175 4 2.238 2.938 6 6.7l3.763-3.763L10.825 4z'/%3E%3C/svg%3E");
+		background-repeat: no-repeat;
+		background-position: right 0.7rem center;
+		padding-right: 2rem;
+	}
+
+	select:disabled {
+		cursor: not-allowed;
+		opacity: 0.7;
+		background-color: #f5f5f5;
+	}
+
+	input[type="number"] {
+		width: 80px;
+		text-align: center;
+	}
+
+	textarea {
+		resize: vertical;
+		min-height: 100px;
+	}
+
+	label {
+		font-weight: 500;
+		min-width: 80px;
+	}
 
     .field-container label {
         width: auto;
