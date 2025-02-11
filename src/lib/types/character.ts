@@ -5,7 +5,7 @@ export type Character = {
     // Informações Básicas
     name: string;
     race: Race['id']; // ID da raça
-    occupation: Occupation['id'];
+    occupation?: Occupation['id'];
     experience: number;
     currentExperience: number;
     shadow: string;
@@ -94,5 +94,10 @@ export type Character = {
         powers: string;
         corruption: string;
         bonus: string;
+    }>;
+
+    notes: Array<{
+        title: string;
+        description: string;
     }>;
 };
