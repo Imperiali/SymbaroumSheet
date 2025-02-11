@@ -1,6 +1,17 @@
 <script lang="ts">
 	import { character } from '$lib/stores/character';
 	import Section from '$lib/components/common/Section.svelte';
+	import { getRaces, type Race } from '$lib/types/race';
+	import { getOccupations, type Occupation } from '$lib/types/occupation';
+	import { onMount } from 'svelte';
+
+	let races: Race[] = [];
+	let occupations: Occupation[] = [];
+
+	onMount(async () => {
+		races = await getRaces();
+		occupations = await getOccupations();
+	});
 
 	function updateField(field: string, value: string | number) {
 		character.update((char) => ({
@@ -93,24 +104,34 @@
 
 		<div class="field race-field">
 			<label for="race">Raça:</label>
-			<input
-				disabled={locked}
-				type="text"
-				id="race"
-				bind:value={$character.race}
-				on:input={(e) => updateField('race', e.currentTarget.value)}
-			/>
+			<div class="field-container">
+				<select
+					id="race"
+					bind:value={$character.race}
+					on:change={(e) => updateField('race', e.currentTarget.value)}
+					disabled={locked}
+				>
+					{#each races as race}
+						<option value={race.id}>{race.name}</option>
+					{/each}
+				</select>
+			</div>
 		</div>
 
 		<div class="field occupation-field">
 			<label for="occupation">Ocupação:</label>
-			<input
-				disabled={locked}
-				type="text"
-				id="occupation"
-				bind:value={$character.occupation}
-				on:input={(e) => updateField('occupation', e.currentTarget.value)}
-			/>
+			<div class="field-container">
+				<select
+					id="occupation"
+					bind:value={$character.occupation}
+					on:change={(e) => updateField('occupation', e.currentTarget.value)}
+					disabled={locked}
+				>
+					{#each occupations as occupation}
+						<option value={occupation.id}>{occupation.name}</option>
+					{/each}
+				</select>
+			</div>
 		</div>
 
 		<div class="field threshold-container">
@@ -271,11 +292,13 @@
 	}
 
 	input,
-	textarea {
+	textarea,
+	select {
 		padding: 0.5rem;
 		border: 1px solid #ccc;
 		border-radius: 4px;
 		width: 100%;
+		background-color: white;
 	}
 
 	input[type='number'] {

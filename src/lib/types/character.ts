@@ -1,8 +1,11 @@
+import type { Race } from './race';
+import type { Occupation } from './occupation';
+
 export type Character = {
     // Informações Básicas
     name: string;
-    race: string;
-    occupation?: string;
+    race: Race['id']; // ID da raça
+    occupation?: Occupation['id'];
     experience: number;
     currentExperience: number;
     shadow: string;
@@ -74,7 +77,7 @@ export type Character = {
         name: string;
         effect: string;
         type: string;
-        classification: 'N' | 'A' | 'M';
+        classification: 'Novato' | 'Adepto' | 'Mestre';
     }>;
 
     // Amigos e Companheiros

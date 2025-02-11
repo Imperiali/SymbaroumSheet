@@ -14,7 +14,7 @@
                     name: '',
                     effect: '',
                     type: '',
-                    classification: 'N'
+                    classification: 'Novato'
                 }
             ]
         }));
@@ -68,9 +68,9 @@
                         bind:value={ability.classification}
                         disabled={locked}
                     >
-                        <option value="N">N</option>
-                        <option value="A">A</option>
-                        <option value="M">M</option>
+                        <option value="Novato">Novato</option>
+                        <option value="Adepto">Adepto</option>
+                        <option value="Mestre">Mestre</option>
                     </select>
                 </div>
 
