@@ -46,7 +46,7 @@ const createCharacterStore = () => {
         abilities: [],
         companions: [],
         artifacts: [],
-        notes: [],
+        notes: []
     };
 
     const { subscribe, set, update } = writable<Character>(defaultCharacter);
