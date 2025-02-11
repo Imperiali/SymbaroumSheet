@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { character } from '$lib/stores/character';
+	import { sectionVisibility } from '$lib/stores/visibility';
 	import BasicInfo from './BasicInfo.svelte';
 	import Attributes from './Attributes.svelte';
 	import Combat from './Combat.svelte';
@@ -11,6 +12,7 @@
 	import AbilitiesAndPowers from './AbilitiesAndPowers.svelte';
 	import Personal from './Personal.svelte';
 	import Notes from './Notes.svelte';
+	import FAB from '$lib/components/common/FAB.svelte';
 	let saveStatus = '';
 
 	onMount(() => {
@@ -33,25 +35,47 @@
 	</div>
 
 	<div class="page full">
-		<BasicInfo />
-		<Attributes />
+		{#if $sectionVisibility.basicInfo}
+			<BasicInfo />
+		{/if}
+		{#if $sectionVisibility.attributes}
+			<Attributes />
+		{/if}
 	</div>
 
 	<div class="page-container">
 		<div class="page left-page">
-			<Personal />
-			<Combat />
-			<AbilitiesAndPowers abilities={$character?.abilities ?? []} />
-			<Notes />
+			{#if $sectionVisibility.personal}
+				<Personal />
+			{/if}
+			{#if $sectionVisibility.combat}
+				<Combat />
+			{/if}
+			{#if $sectionVisibility.abilitiesAndPowers}
+				<AbilitiesAndPowers abilities={$character?.abilities ?? []} />
+			{/if}
+			{#if $sectionVisibility.notes}
+				<Notes />
+			{/if}
 		</div>
 
 		<div class="page right-page">
-			<Companions />
-			<Artifacts />
-			<Equipment />
-			<Wealth />
+			{#if $sectionVisibility.companions}
+				<Companions />
+			{/if}
+			{#if $sectionVisibility.artifacts}
+				<Artifacts />
+			{/if}
+			{#if $sectionVisibility.equipment}
+				<Equipment />
+			{/if}
+			{#if $sectionVisibility.wealth}
+				<Wealth />
+			{/if}
 		</div>
 	</div>
+
+	<FAB />
 </div>
 
 <style>
