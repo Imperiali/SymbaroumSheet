@@ -17,4 +17,9 @@
         text-align: center;
         margin-bottom: 30px;
     }
+    @media screen and (max-width: 768px) {
+        h1 {
+            display: none;
+        }
+    }
 </style>
