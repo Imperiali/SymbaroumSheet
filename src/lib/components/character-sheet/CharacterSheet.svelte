@@ -54,9 +54,6 @@
 			{#if $sectionVisibility.abilitiesAndPowers}
 				<AbilitiesAndPowers abilities={$character?.abilities ?? []} />
 			{/if}
-			{#if $sectionVisibility.notes}
-				<Notes />
-			{/if}
 		</div>
 
 		<div class="page right-page">
@@ -73,6 +70,11 @@
 				<Wealth />
 			{/if}
 		</div>
+	</div>
+	<div class="page full">
+		{#if $sectionVisibility.notes}
+			<Notes />
+		{/if}
 	</div>
 
 	<FAB />
