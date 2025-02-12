@@ -1,6 +1,8 @@
 import { writable } from 'svelte/store';
 import type { Character } from '$lib/types/character';
 import { CharacterService } from '$lib/firebase/character';
+import { user } from './auth';
+import { get } from 'svelte/store';
 import { storageService } from '$lib/services/storage';
 
 const createCharacterStore = () => {
@@ -47,58 +49,31 @@ const createCharacterStore = () => {
         abilities: [],
         companions: [],
         artifacts: [],
-        notes: []
+        notes: [],
+        playerId: ''
     };
 
-    let currentCharacterName: string | null = null;
-    const { subscribe, set, update } = writable<Character>(defaultCharacter);
+    const storedCharacter = storageService.loadCharacter();
+    const { subscribe, set, update } = writable<Character>(storedCharacter || defaultCharacter);
 
     return {
         subscribe,
-        setCharacterName: (name: string) => {
-            currentCharacterName = name;
-        },
-        set: async (character: Character) => {
-            if (!currentCharacterName) throw new Error('Character name not set');
-            set(character);
+        loadCharacter: (character: Character) => {
             storageService.saveCharacter(character);
-            await CharacterService.updateCharacter(currentCharacterName, character);
+            set(character);
         },
-        update: async (fn: (character: Character) => Character) => {
-            if (!currentCharacterName) throw new Error('Character name not set');
-            update(char => {
-                const updated = fn(char);
-                storageService.saveCharacter(updated);
-                CharacterService.updateCharacter(currentCharacterName!, updated);
-                return updated;
-            });
-        },
-        reset: async () => {
-            if (!currentCharacterName) throw new Error('Character name not set');
-            set(defaultCharacter);
-            storageService.saveCharacter(defaultCharacter);
-            await CharacterService.updateCharacter(currentCharacterName, defaultCharacter);
-        },
-        load: async (characterName: string) => {
-            currentCharacterName = characterName;
-            try {
-                const character = await CharacterService.getCharacter(characterName);
-                if (character) {
-                    set(character);
-                    storageService.saveCharacter(character);
-                    return;
-                }
-            } catch (error) {
-                console.error('Erro ao carregar do Firebase:', error);
-            }
+        updateCharacter: async (updates: Partial<Character>) => {
+            const currentUser = get(user);
+            if (!currentUser?.uid) return;
 
-            const localCharacter = storageService.loadCharacter();
-            if (localCharacter) {
-                set(localCharacter);
-                CharacterService.updateCharacter(characterName, localCharacter).catch(error => {
-                    console.error('Erro ao sincronizar com Firebase:', error);
-                });
-            }
+            const currentCharacter = get({ subscribe });
+            const updatedCharacter = await CharacterService.update(currentCharacter.name, currentUser.uid, updates);
+            storageService.saveCharacter(updatedCharacter);
+            set(updatedCharacter);
+        },
+        reset: () => {
+            storageService.saveCharacter(defaultCharacter);
+            set(defaultCharacter);
         }
     };
 };

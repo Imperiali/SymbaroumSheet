@@ -1,50 +1,60 @@
 <script lang="ts">
-    import Toasts from '$lib/components/common/Toasts.svelte';
+    import { signUp } from '$lib/services/auth';
     import { goto } from '$app/navigation';
-    import { login } from '$lib/services/auth';
-    import { user } from '$lib/stores/auth';
+    import Toasts from '$lib/components/common/Toasts.svelte';
 
+    let name = '';
     let email = '';
     let password = '';
-    let loginError = '';
+    let error = '';
     let loading = false;
 
-    async function handleLogin() {
-        if (!email || !password) {
-            loginError = 'Por favor, preencha todos os campos';
+    const handleSignUp = async () => {
+        if (!name || !email || !password) {
+            error = 'Por favor, preencha todos os campos';
             return;
         }
 
         loading = true;
-        loginError = '';
+        error = '';
 
         try {
-            const { user: userData, player } = await login(email, password);
-            if (userData) {
-                goto(`/${player.name}`);
-            }
-        } catch (error) {
-            loginError = 'Erro ao fazer login. Verifique suas credenciais.';
+            await signUp(email, password, name);
+            goto('/');
+        } catch (e) {
+            error = 'Erro ao criar conta. Verifique suas informações.';
         } finally {
             loading = false;
         }
-    }
+    };
 </script>
 
 <main>
     <div class="login-container">
         <div class="header">
             <h1>Symbaroum</h1>
-            <p>Ficha de Personagem</p>
+            <p>Criar Nova Conta</p>
         </div>
 
-        <form on:submit|preventDefault={handleLogin}>
-            {#if loginError}
+        <form on:submit|preventDefault={handleSignUp}>
+            {#if error}
                 <div class="error">
                     <span class="material-icons">error</span>
-                    <span>{loginError}</span>
+                    <span>{error}</span>
                 </div>
             {/if}
+
+            <div class="form-group">
+                <label for="name">Nome</label>
+                <input
+                    type="text"
+                    id="name"
+                    bind:value={name}
+                    required
+                    placeholder="Seu nome"
+                    disabled={loading}
+                />
+            </div>
 
             <div class="form-group">
                 <label for="email">Email</label>
@@ -73,17 +83,17 @@
             <button type="submit" class="button" disabled={loading}>
                 {#if loading}
                     <span class="material-icons spinning">sync</span>
-                    <span>Entrando...</span>
+                    <span>Criando conta...</span>
                 {:else}
-                    <span>Entrar</span>
+                    <span>Criar conta</span>
                 {/if}
             </button>
 
             <div class="divider">
-                <span>Não tem uma conta?</span>
+                <span>Já tem uma conta?</span>
             </div>
 
-            <a href="/sign-up" class="button secondary">Criar conta</a>
+            <a href="/" class="button secondary">Fazer login</a>
         </form>
     </div>
 </main>

@@ -1,46 +1,57 @@
 <script lang="ts">
-	import { character } from '$lib/stores/character';
+	import type { Character } from '$lib/types/character';
 	import Section from '$lib/components/common/Section.svelte';
 
+	export let character: Character;
+	export let handleUpdate: (updates: Partial<Character>) => Promise<void>;
+
 	function addNote() {
-		character.update((char) => ({
-			...char,
+		handleUpdate({
 			notes: [
-				...char.notes,
+				...character.notes,
 				{
 					title: '',
 					description: ''
 				}
 			]
-		}));
+		});
 	}
 
 	function removeNote(index: number) {
-		character.update((char) => ({
-			...char,
-			notes: char.notes.filter((_, i) => i !== index)
-		}));
+		handleUpdate({
+			notes: character.notes.filter((_, i) => i !== index)
+		});
+	}
+
+	function updateNote(index: number, field: string, value: string) {
+		handleUpdate({
+			notes: character.notes.map((note, i) =>
+				i === index ? { ...note, [field]: value } : note
+			)
+		});
 	}
 </script>
 
 <Section title="Notas" let:locked>
-	{#each $character.notes as item, index}
+	{#each character.notes as item, index}
 		<div class="note-item">
 			<div class="field">
 				<label for="note-title-{index}">Título:</label>
 				<input
 					type="text"
 					id="note-name-{index}"
-					bind:value={item.title}
+					value={item.title}
 					disabled={locked}
+					on:input={(e) => updateNote(index, 'title', e.currentTarget.value)}
 				/>
 			</div>
 			<div class="field">
 				<label for="note-description-{index}">Notas:</label>
 				<textarea
 					id="note-description-{index}"
-					bind:value={item.description}
+					value={item.description}
 					disabled={locked}
+					on:input={(e) => updateNote(index, 'description', e.currentTarget.value)}
 				></textarea>
 			</div>
 			{#if !locked}
@@ -70,7 +81,7 @@
 
 	.field {
 		display: flex;
-    flex-direction: column;
+		flex-direction: column;
 		margin-bottom: 12px;
 		align-items: center;
 	}

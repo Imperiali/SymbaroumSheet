@@ -1,9 +1,13 @@
 <script lang="ts">
-	import { character } from '$lib/stores/character';
+	import type { Character } from '$lib/types/character';
 	import Section from '$lib/components/common/Section.svelte';
 	import { getRaces, type Race } from '$lib/types/race';
 	import { getOccupations, type Occupation } from '$lib/types/occupation';
 	import { onMount } from 'svelte';
+
+	export let character: Character;
+	export let handleUpdate: (updates: Partial<Character>) => Promise<void>;
+
 	let races: Race[] = [];
 	let occupations: Occupation[] = [];
 	onMount(async () => {
@@ -14,15 +18,12 @@
 	let visible = true;
 
 	function updateField(field: string, value: string | number) {
-		character.update((char) => ({
-			...char,
-			[field]: value
-		}));
+		handleUpdate({ [field]: value });
 	}
 
 	$: vitalityPercentage =
-		$character?.vitality?.current != null && $character?.vitality?.max != null
-			? ($character.vitality.current / $character.vitality.max) * 100
+		character?.vitality?.current != null && character?.vitality?.max != null
+			? (character.vitality.current / character.vitality.max) * 100
 			: 0;
 	$: vitalityColor =
 		vitalityPercentage > 50 ? '#33691E' : vitalityPercentage > 30 ? '#FFB74D' : '#B71C1C';
@@ -36,7 +37,7 @@
 				disabled={true}
 				type="text"
 				id="name"
-				bind:value={$character.name}
+				value={character.name}
 			/>
 		</div>
 
@@ -45,7 +46,7 @@
 			<div class="field-container">
 				<select
 					id="occupation"
-					bind:value={$character.occupation}
+					value={character.occupation}
 					on:change={(e) => updateField('occupation', e.currentTarget.value)}
 					disabled={locked}
 				>
@@ -60,13 +61,12 @@
 			<div class="header-container">
 				<button
 					on:click={() => {
-						character.update((char) => ({
-							...char,
+						handleUpdate({
 							vitality: {
-								...char.vitality,
-								current: char.vitality.current - 1 || 0
+								...character.vitality,
+								current: character.vitality.current - 1 || 0
 							}
-						}));
+						});
 					}}
 				>
 					<span class="material-icons">chevron_left</span>
@@ -74,13 +74,12 @@
 				<span>Vitalidade</span>
 				<button
 					on:click={() => {
-						character.update((char) => ({
-							...char,
+						handleUpdate({
 							vitality: {
-								...char.vitality,
-								current: char.vitality.current + 1 || 0
+								...character.vitality,
+								current: character.vitality.current + 1 || 0
 							}
-						}));
+						});
 					}}
 				>
 					<span class="material-icons">chevron_right</span>
@@ -100,33 +99,31 @@
 							disabled={locked}
 							type="number"
 							id="currentVitality"
-							bind:value={$character.vitality.current}
+							value={character.vitality.current}
 							on:input={(e) => {
-								character.update((char) => ({
-									...char,
+								handleUpdate({
 									vitality: {
-										...char.vitality,
+										...character.vitality,
 										current: parseInt(e.currentTarget.value) || 0
 									}
-								}));
+								});
 							}}
 						/>
 					</div>
 					<div class="field-container">
-						<label for="maxVitality">Máxima:</label>
+						<label for="maxVitality">Máximo:</label>
 						<input
 							disabled={locked}
 							type="number"
 							id="maxVitality"
-							bind:value={$character.vitality.max}
+							value={character.vitality.max}
 							on:input={(e) => {
-								character.update((char) => ({
-									...char,
+								handleUpdate({
 									vitality: {
-										...char.vitality,
+										...character.vitality,
 										max: parseInt(e.currentTarget.value) || 0
 									}
-								}));
+								});
 							}}
 						/>
 					</div>
@@ -136,7 +133,7 @@
 							disabled={locked}
 							type="number"
 							id="painThreshold"
-							bind:value={$character.painThreshold}
+							value={character.painThreshold}
 							on:input={(e) => updateField('painThreshold', parseInt(e.currentTarget.value) || 0)}
 						/>
 					</div>
@@ -150,7 +147,7 @@
 					disabled={locked}
 					type="number"
 					id="current-experience"
-					bind:value={$character.currentExperience}
+					value={character.currentExperience}
 					on:input={(e) => updateField('currentExperience', parseInt(e.currentTarget.value) || 0)}
 				/>
 				<label class="text-left" for="current-experience">Disponível</label>
@@ -160,7 +157,7 @@
 					disabled={locked}
 					type="number"
 					id="experience"
-					bind:value={$character.experience}
+					value={character.experience}
 					on:input={(e) => updateField('experience', parseInt(e.currentTarget.value) || 0)}
 				/>
 				<label class="text-left" for="experience">Total</label>
@@ -176,15 +173,14 @@
 						disabled={locked}
 						type="number"
 						id="currentCorruption"
-						bind:value={$character.corruption.current}
+						value={character.corruption.current}
 						on:input={(e) => {
-							character.update((char) => ({
-								...char,
+							handleUpdate({
 								corruption: {
-									...char.corruption,
+									...character.corruption,
 									current: parseInt(e.currentTarget.value) || 0
 								}
-							}));
+							});
 						}}
 					/>
 				</div>
@@ -194,15 +190,14 @@
 						disabled={locked}
 						type="number"
 						id="permanentCorruption"
-						bind:value={$character.corruption.permanent}
+						value={character.corruption.permanent}
 						on:input={(e) => {
-							character.update((char) => ({
-								...char,
+							handleUpdate({
 								corruption: {
-									...char.corruption,
+									...character.corruption,
 									permanent: parseInt(e.currentTarget.value) || 0
 								}
-							}));
+							});
 						}}
 					/>
 				</div>
@@ -212,7 +207,7 @@
 						disabled={locked}
 						type="number"
 						id="corruptionThreshold"
-						bind:value={$character.corruptionThreshold}
+						value={character.corruptionThreshold}
 						on:input={(e) =>
 							updateField('corruptionThreshold', parseInt(e.currentTarget.value) || 0)}
 					/>
@@ -230,7 +225,7 @@
 					<div class="field-container">
 						<select
 							id="race"
-							bind:value={$character.race}
+							value={character.race}
 							on:change={(e) => updateField('race', e.currentTarget.value)}
 							disabled={locked}
 						>
@@ -247,7 +242,7 @@
 						disabled={locked}
 						type="text"
 						id="shadow"
-						bind:value={$character.shadow}
+						value={character.shadow}
 						on:input={(e) => updateField('shadow', e.currentTarget.value)}
 					/>
 				</div>
@@ -255,7 +250,7 @@
 					<label for="quote">Citação:</label>
 					<textarea
 						id="quote"
-						bind:value={$character.quote}
+						value={character.quote}
 						on:input={(e) => updateField('quote', e.currentTarget.value)}
 					></textarea>
 				</div>

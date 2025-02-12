@@ -1,6 +1,7 @@
 export type Character = {
     // Informações Básicas
     name: string;
+    playerId: string;
     race: string;
     occupation?: string;
     experience: number;

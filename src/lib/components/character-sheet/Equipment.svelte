@@ -1,37 +1,48 @@
 <script lang="ts">
-	import { character } from '$lib/stores/character';
+	import type { Character } from '$lib/types/character';
 	import Section from '$lib/components/common/Section.svelte';
 
+	export let character: Character;
+	export let handleUpdate: (updates: Partial<Character>) => void;
+
 	function addEquipment() {
-		character.update((char) => ({
-			...char,
+		handleUpdate({
 			equipment: [
-				...char.equipment,
+				...character.equipment,
 				{
 					name: '',
 					description: ''
 				}
 			]
-		}));
+		});
 	}
 
 	function removeEquipment(index: number) {
-		character.update((char) => ({
-			...char,
-			equipment: char.equipment.filter((_, i) => i !== index)
-		}));
+		handleUpdate({
+			equipment: character.equipment.filter((_, i) => i !== index)
+		});
+	}
+
+	function updateEquipment(index: number, field: string, value: string) {
+		const updatedEquipment = [...character.equipment];
+		updatedEquipment[index] = {
+			...updatedEquipment[index],
+			[field]: value
+		};
+		handleUpdate({ equipment: updatedEquipment });
 	}
 </script>
 
 <Section title="Equipamento" let:locked>
-	{#each $character.equipment as item, index}
+	{#each character.equipment as item, index}
 		<div class="equipment-item">
 			<div class="field">
 				<label for="equipment-name-{index}">Nome:</label>
 				<input
 					type="text"
 					id="equipment-name-{index}"
-					bind:value={item.name}
+					value={item.name}
+					on:input={(e) => updateEquipment(index, 'name', e.currentTarget.value)}
 					disabled={locked}
 				/>
 			</div>
@@ -39,7 +50,8 @@
 				<label for="equipment-description-{index}">Descrição:</label>
 				<textarea
 					id="equipment-description-{index}"
-					bind:value={item.description}
+					value={item.description}
+					on:input={(e) => updateEquipment(index, 'description', e.currentTarget.value)}
 					disabled={locked}
 				></textarea>
 			</div>

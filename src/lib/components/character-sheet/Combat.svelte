@@ -1,61 +1,58 @@
 <script lang="ts">
-    import { character } from '$lib/stores/character';
+    import type { Character } from '$lib/types/character';
     import Section from '$lib/components/common/Section.svelte';
 
+    export let character: Character;
+    export let handleUpdate: (updates: Partial<Character>) => Promise<void>;
+
     function addWeapon() {
-        character.update(char => ({
-            ...char,
-            weapons: [...char.weapons, {
+        handleUpdate({
+            weapons: [...character.weapons, {
                 name: '',
                 grace: '',
                 damage: '',
                 quality: '',
                 attribute: ''
             }]
-        }));
+        });
     }
 
     function removeWeapon(index: number) {
-        character.update(char => ({
-            ...char,
-            weapons: char.weapons.filter((_, i) => i !== index)
-        }));
+        handleUpdate({
+            weapons: character.weapons.filter((_, i) => i !== index)
+        });
     }
 
     function addArmor() {
-        character.update(char => ({
-            ...char,
-            armor: [...char.armor, {
+        handleUpdate({
+            armor: [...character.armor, {
                 name: '',
                 protection: 0,
                 quality: ''
             }]
-        }));
+        });
     }
 
     function removeArmor(index: number) {
-        character.update(char => ({
-            ...char,
-            armor: char.armor.filter((_, i) => i !== index)
-        }));
+        handleUpdate({
+            armor: character.armor.filter((_, i) => i !== index)
+        });
     }
 
     function updateWeapon(index: number, field: string, value: string) {
-        character.update(char => ({
-            ...char,
-            weapons: char.weapons.map((weapon, i) => 
+        handleUpdate({
+            weapons: character.weapons.map((weapon, i) => 
                 i === index ? { ...weapon, [field]: value } : weapon
             )
-        }));
+        });
     }
 
     function updateArmor(index: number, field: string, value: string | number) {
-        character.update(char => ({
-            ...char,
-            armor: char.armor.map((armor, i) => 
+        handleUpdate({
+            armor: character.armor.map((armor, i) => 
                 i === index ? { ...armor, [field]: value } : armor
             )
-        }));
+        });
     }
 </script>
 
@@ -65,14 +62,14 @@
         {#if !locked}
             <button class="add-button" on:click={addWeapon}>+ Adicionar Arma</button>
         {/if}
-        {#each $character.weapons as weapon, i}
+        {#each character.weapons as weapon, i}
             <div class="weapon-entry">
                 <div class="field">
                     <label for="weapon-name-{i}">Nome:</label>
                     <input 
                         type="text" 
                         id="weapon-name-{i}" 
-                        bind:value={weapon.name}
+                        value={weapon.name}
                         disabled={locked}
                         on:input={(e) => updateWeapon(i, 'name', e.currentTarget.value)}
                     />
@@ -82,7 +79,7 @@
                     <input 
                         type="text" 
                         id="weapon-grace-{i}" 
-                        bind:value={weapon.grace}
+                        value={weapon.grace}
                         disabled={locked}
                         on:input={(e) => updateWeapon(i, 'grace', e.currentTarget.value)}
                     />
@@ -92,7 +89,7 @@
                     <input 
                         type="text" 
                         id="weapon-damage-{i}" 
-                        bind:value={weapon.damage}
+                        value={weapon.damage}
                         disabled={locked}
                         on:input={(e) => updateWeapon(i, 'damage', e.currentTarget.value)}
                     />
@@ -102,7 +99,7 @@
                     <input 
                         type="text" 
                         id="weapon-quality-{i}" 
-                        bind:value={weapon.quality}
+                        value={weapon.quality}
                         disabled={locked}
                         on:input={(e) => updateWeapon(i, 'quality', e.currentTarget.value)}
                     />
@@ -112,7 +109,7 @@
                     <input 
                         type="text" 
                         id="weapon-attribute-{i}" 
-                        bind:value={weapon.attribute}
+                        value={weapon.attribute}
                         disabled={locked}
                         on:input={(e) => updateWeapon(i, 'attribute', e.currentTarget.value)}
                     />
@@ -120,7 +117,6 @@
                 {#if !locked}
                     <button class="remove-button" on:click={() => removeWeapon(i)}>
                         <span class="material-icons">delete</span>
-                        Remover
                     </button>
                 {/if}
             </div>
@@ -129,15 +125,17 @@
 
     <div class="subsection armor">
         <h3>Armadura</h3>
-        <button class="add-button" on:click={addArmor}>+ Adicionar Armadura</button>
-        {#each $character.armor as armor, i}
+        {#if !locked}
+            <button class="add-button" on:click={addArmor}>+ Adicionar Armadura</button>
+        {/if}
+        {#each character.armor as armor, i}
             <div class="armor-entry">
                 <div class="field">
                     <label for="armor-name-{i}">Nome:</label>
                     <input 
                         type="text" 
                         id="armor-name-{i}" 
-                        bind:value={armor.name}
+                        value={armor.name}
                         disabled={locked}
                         on:input={(e) => updateArmor(i, 'name', e.currentTarget.value)}
                     />
@@ -147,7 +145,7 @@
                     <input 
                         type="number" 
                         id="armor-protection-{i}" 
-                        bind:value={armor.protection}
+                        value={armor.protection}
                         disabled={locked}
                         on:input={(e) => updateArmor(i, 'protection', parseInt(e.currentTarget.value) || 0)}
                     />
@@ -157,7 +155,7 @@
                     <input 
                         type="text" 
                         id="armor-quality-{i}" 
-                        bind:value={armor.quality}
+                        value={armor.quality}
                         disabled={locked}
                         on:input={(e) => updateArmor(i, 'quality', e.currentTarget.value)}
                     />
