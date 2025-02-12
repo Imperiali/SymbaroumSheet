@@ -13,10 +13,20 @@
 	import Personal from './Personal.svelte';
 	import Notes from './Notes.svelte';
 	import FAB from '$lib/components/common/FAB.svelte';
-	let saveStatus = '';
 
-	onMount(() => {
-		character.load();
+	export let characterName: string;
+	let saveStatus = '';
+	let loading = true;
+	let error = '';
+
+	onMount(async () => {
+		try {
+			await character.load(characterName);
+			loading = false;
+		} catch (e) {
+			error = 'Erro ao carregar personagem';
+			console.error(e);
+		}
 	});
 
 	$: {
@@ -29,43 +39,48 @@
 	}
 </script>
 
-<div class="character-sheet">
-	<div class="save-status" class:visible={saveStatus !== ''}>
-		{saveStatus}
-	</div>
+{#if loading}
+	<div class="loading">Carregando...</div>
+{:else if error}
+	<div class="error">{error}</div>
+{:else}
+	<div class="character-sheet">
+		<div class="save-status" class:visible={saveStatus !== ''}>
+			{saveStatus}
+		</div>
 
-	<div class="page full">
-		{#if $sectionVisibility.basicInfo}
-			<BasicInfo />
-		{/if}
-		{#if $sectionVisibility.attributes}
-			<Attributes />
-		{/if}
-	</div>
+		<div class="page full">
+			{#if $sectionVisibility.basicInfo}
+				<BasicInfo />
+			{/if}
+			{#if $sectionVisibility.attributes}
+				<Attributes />
+			{/if}
+		</div>
 
-	<div class="page-container">
-		<div class="page left-page">
-			{#if $sectionVisibility.personal}
-				<Personal />
-			{/if}
-			{#if $sectionVisibility.combat}
-				<Combat />
-			{/if}
+		<div class="page-container">
+			<div class="page left-page">
+				{#if $sectionVisibility.personal}
+					<Personal />
+				{/if}
+				{#if $sectionVisibility.combat}
+					<Combat />
+				{/if}
 			{#if $sectionVisibility.abilitiesAndPowers}
 				<AbilitiesAndPowers abilities={$character?.abilities ?? []} />
 			{/if}
 		</div>
 
-		<div class="page right-page">
-			{#if $sectionVisibility.companions}
-				<Companions />
-			{/if}
-			{#if $sectionVisibility.artifacts}
-				<Artifacts />
-			{/if}
+			<div class="page right-page">
+				{#if $sectionVisibility.companions}
+					<Companions />
+				{/if}
+				{#if $sectionVisibility.artifacts}
+					<Artifacts />
+				{/if}
 			{#if $sectionVisibility.equipment}
 				<Equipment />
-			{/if}
+				{/if}
 			{#if $sectionVisibility.wealth}
 				<Wealth />
 			{/if}
@@ -79,6 +94,8 @@
 
 	<FAB />
 </div>
+{/if}
+
 
 <style>
 	.character-sheet {
