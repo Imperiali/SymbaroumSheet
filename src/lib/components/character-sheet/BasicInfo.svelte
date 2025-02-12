@@ -24,11 +24,10 @@
 		<div class="field player-name">
 			<label for="name">Nome:</label>
 			<input
-				disabled={locked}
+				disabled={true}
 				type="text"
 				id="name"
 				bind:value={$character.name}
-				on:input={(e) => updateField('name', e.currentTarget.value)}
 			/>
 		</div>
 
@@ -149,20 +148,6 @@
 				<label class="text-left" for="experience">Total</label>
 			</div>
 		</div>
-		<!-- <div class="field threshold-container">
-			<span>Limiar</span>
-			<div class="field-container">
-				<label for="painThreshold">Dor:</label>
-				<input
-					disabled={locked}
-					type="number"
-					id="painThreshold"
-					bind:value={$character.painThreshold}
-					on:input={(e) => updateField('painThreshold', parseInt(e.currentTarget.value) || 0)}
-				/>
-			</div>
-			
-		</div> -->
 
 		<div class="field multiple corruption-field">
 			<span>Corrupção</span>
@@ -303,13 +288,6 @@
 		display: flex;
 		gap: 1rem;
 		justify-content: space-between;
-	}
-
-	.threshold-container {
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
-		width: 100%;
 	}
 
 	.vitality-bar {
@@ -513,8 +491,7 @@
 		}
 
 		.exp-field,
-		.vitality-field,
-		.threshold-container {
+		.vitality-field {
 			text-align: center;
 			span {
 				width: 100%;
