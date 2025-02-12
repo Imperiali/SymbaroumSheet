@@ -2,6 +2,8 @@ export type AbilityType = 'Ability' | 'Mystical Power' | 'Ritual';
 
 export type AbilityClassification = 'N' | 'A' | 'M';
 
+export type AbilityActionType = 'Reaction' | 'Special' | 'Active' | 'Passive';
+
 export type AbilityRequirement = {
   attribute?: {
     name: string;
@@ -30,6 +32,18 @@ export interface Ability {
   requirements: AbilityRequirement;
   effect: AbilityEffect;
   description: string;
+  novice?: {
+    description: string;
+    action: string;
+  };
+  adept?: {
+    description: string;
+    action: string;
+  };
+  master?: {
+    description: string;
+    action: string;
+  }
 }
 
 export function meetsRequirements(characterData: any, ability: Ability): boolean {
