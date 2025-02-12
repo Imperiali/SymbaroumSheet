@@ -1,6 +1,15 @@
 <script lang="ts">
 	import { character } from '$lib/stores/character';
 	import Section from '$lib/components/common/Section.svelte';
+	import { getRaces, type Race } from '$lib/types/race';
+	import { getOccupations, type Occupation } from '$lib/types/occupation';
+	import { onMount } from 'svelte';
+	let races: Race[] = [];
+	let occupations: Occupation[] = [];
+	onMount(async () => {
+		races = await getRaces();
+		occupations = await getOccupations();
+	});
 
 	let visible = true;
 
@@ -33,40 +42,49 @@
 
 		<div class="field occupation-field">
 			<label for="occupation">Ocupação:</label>
-			<input
-				disabled={locked}
-				type="text"
-				id="occupation"
-				bind:value={$character.occupation}
-				on:input={(e) => updateField('occupation', e.currentTarget.value)}
-			/>
+			<div class="field-container">
+				<select
+					id="occupation"
+					bind:value={$character.occupation}
+					on:change={(e) => updateField('occupation', e.currentTarget.value)}
+					disabled={locked}
+				>
+					{#each occupations as occupation}
+						<option value={occupation.id}>{occupation.name}</option>
+					{/each}
+				</select>
+			</div>
 		</div>
 
 		<div class="field multiple vitality-field">
 			<div class="header-container">
-        <button on:click={() => {
-          character.update((char) => ({
-            ...char,
-            vitality: {
-              ...char.vitality,
-              current: (char.vitality.current - 1) || 0
-            }
-          }));
-        }}>
-          <span class="material-icons">chevron_left</span>
-        </button>
+				<button
+					on:click={() => {
+						character.update((char) => ({
+							...char,
+							vitality: {
+								...char.vitality,
+								current: char.vitality.current - 1 || 0
+							}
+						}));
+					}}
+				>
+					<span class="material-icons">chevron_left</span>
+				</button>
 				<span>Vitalidade</span>
-        <button on:click={() => {
-          character.update((char) => ({
-            ...char,
-            vitality: {
-              ...char.vitality,
-              current: (char.vitality.current + 1) || 0
-            }
-          }));
-        }}>
-				<span class="material-icons">chevron_right</span>
-        </button>
+				<button
+					on:click={() => {
+						character.update((char) => ({
+							...char,
+							vitality: {
+								...char.vitality,
+								current: char.vitality.current + 1 || 0
+							}
+						}));
+					}}
+				>
+					<span class="material-icons">chevron_right</span>
+				</button>
 			</div>
 			<div class="vitality-container">
 				<div class="vitality-bar">
@@ -188,16 +206,17 @@
 						}}
 					/>
 				</div>
-        <div class="field-container">
-          <label for="corruptionThreshold">Limiar:</label>
-          <input
-            disabled={locked}
-            type="number"
-            id="corruptionThreshold"
-            bind:value={$character.corruptionThreshold}
-            on:input={(e) => updateField('corruptionThreshold', parseInt(e.currentTarget.value) || 0)}
-          />
-        </div>
+				<div class="field-container">
+					<label for="corruptionThreshold">Limiar:</label>
+					<input
+						disabled={locked}
+						type="number"
+						id="corruptionThreshold"
+						bind:value={$character.corruptionThreshold}
+						on:input={(e) =>
+							updateField('corruptionThreshold', parseInt(e.currentTarget.value) || 0)}
+					/>
+				</div>
 			</div>
 		</div>
 
@@ -208,13 +227,18 @@
 			{#if visible}
 				<div class="field race-field">
 					<label for="race">Raça:</label>
-					<input
-						disabled={locked}
-						type="text"
-						id="race"
-						bind:value={$character.race}
-						on:input={(e) => updateField('race', e.currentTarget.value)}
-					/>
+					<div class="field-container">
+						<select
+							id="race"
+							bind:value={$character.race}
+							on:change={(e) => updateField('race', e.currentTarget.value)}
+							disabled={locked}
+						>
+							{#each races as race}
+								<option value={race.id}>{race.name}</option>
+							{/each}
+						</select>
+					</div>
 				</div>
 
 				<div class="field shadow-field">
@@ -305,7 +329,7 @@
 	}
 
 	input,
-	textarea {
+	textarea, select {
 		padding: 0.5rem;
 		border: 1px solid #ccc;
 		border-radius: 4px;
@@ -334,7 +358,7 @@
 	.basic-info-grid {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		gap: .5rem 1.5rem;
+		gap: 0.5rem 1.5rem;
 		padding: 1rem;
 		max-width: 1200px;
 		margin: 0 auto;
@@ -419,9 +443,9 @@
 			min-width: 50px;
 		}
 
-    button {
-      width: fit-content;
-    }
+		button {
+			width: fit-content;
+		}
 	}
 
 	.subsection {
@@ -432,7 +456,7 @@
 		position: relative;
 		order: 5;
 		grid-row: 4;
-    grid-column: 1 / span 6 ;
+		grid-column: 1 / span 6;
 
 		h3 {
 			font-family: var(--header-font);
@@ -448,11 +472,12 @@
 	@media (max-width: 768px) {
 		.basic-info-grid {
 			grid-template-columns: 1fr;
-			gap: .5rem 1rem;
+			gap: 0.5rem 1rem;
 			padding: 0.5rem;
 		}
 
-		.field, .subsection {
+		.field,
+		.subsection {
 			grid-column: 1 !important;
 			grid-row: auto !important;
 		}
@@ -503,15 +528,15 @@
 			}
 		}
 
-    .subsection {
-      grid-column: 1;
-    }
+		.subsection {
+			grid-column: 1;
+		}
 	}
 
 	@media (max-width: 480px) {
 		.basic-info-grid {
 			padding: 0.25rem;
-			gap: .5rem 0.75rem;
+			gap: 0.5rem 0.75rem;
 		}
 
 		input,
@@ -540,18 +565,17 @@
 		.vitality-field,
 		.corruption-field {
 			order: 0;
-      grid-row: 2;
-      grid-column: 1;
+			grid-row: 2;
+			grid-column: 1;
 		}
-
 
 		.occupation-field {
 			order: 0;
 		}
 
-    .subsection {
-      order: 4;
-      grid-row: 5;
-    }
+		.subsection {
+			order: 4;
+			grid-row: 5;
+		}
 	}
 </style>
