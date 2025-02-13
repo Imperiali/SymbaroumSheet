@@ -80,6 +80,7 @@
         background: none;
         cursor: pointer;
         font-family: inherit;
+        width: auto;
     }
 
     .nav-link:hover {
