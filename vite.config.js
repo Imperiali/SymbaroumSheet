@@ -20,7 +20,10 @@ export default defineConfig({
 				'node:events',
 				'node:buffer',
 				'node:zlib',
-				'node:http2'
+				'node:http2',
+				'node:dns',
+				'node:tls',
+				'node:process'
 			]
 		}
 	},
@@ -29,5 +32,10 @@ export default defineConfig({
 	},
 	optimizeDeps: {
 		exclude: ['firebase', '@firebase/*']
+	},
+	define: {
+		'process.env.NODE_ENV': '"production"',
+		'process.env': '{}',
+		'process.versions': '{}'
 	}
 });

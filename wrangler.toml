@@ -8,11 +8,10 @@ command = "npm run build"
 [site]
 bucket = ".svelte-kit/output/client"
 
-[build.upload]
-format = "modules"
-
 [env.production]
 name = "symbaroum-prod"
+routes = ["symbaroum.imperiali.com.br/*"]
 
 [env.staging]
 name = "symbaroum-staging"
+routes = ["staging.symbaroum.imperiali.com.br/*"]
