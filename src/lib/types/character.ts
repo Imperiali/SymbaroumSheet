@@ -1,3 +1,5 @@
+import type { Trait, TraitClassification, TraitClassificationObj, TraitType } from "./traits";
+
 export type Character = {
   // Informações Básicas
   name: string;
@@ -94,10 +96,7 @@ export type Character = {
   }>;
 
   //Traços, Dádivas e Fardos
-  traits: Array<{
-    name: string;
-    description: string;
-  }>;
+  traits: Array<Trait>;
 
   // Anotações
   notes: Array<{

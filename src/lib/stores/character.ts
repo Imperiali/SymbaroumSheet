@@ -47,7 +47,8 @@ const createCharacterStore = () => {
         abilities: [],
         companions: [],
         artifacts: [],
-        notes: []
+        notes: [],
+        traits: []
     };
 
     let currentCharacterName: string | null = null;

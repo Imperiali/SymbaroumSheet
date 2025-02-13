@@ -1,9 +1,11 @@
 import { browser } from '$app/environment';
 import type { Character } from '$lib/types/character';
 import type { Toast } from '$lib/types/toast';
+import type { Trait } from '$lib/types/traits';
 
 const STORAGE_KEY_SHEET = 'symbaroum-character';
-const STORAGE_KEY_TOASTS = 'toast-list'
+const STORAGE_KEY_TOASTS = 'toast-list';
+const STORAGE_KEY_TRAITS = 'traits-list';
 
 export const storageService = {
   saveCharacter: (character: Character): void => {
@@ -49,5 +51,26 @@ export const storageService = {
       }
     }
     return null;
-  }
+  },
+  saveTraits: (traits: Array<Trait>): void => {
+    if (browser) {
+      try {
+        localStorage.setItem(STORAGE_KEY_TRAITS, JSON.stringify(traits));
+      } catch (error) {
+        console.error('Error saving toasts:', error);
+      }
+    }
+  },
+  loadTraits: (): Array<Trait> | null => {
+    if (browser) {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY_TRAITS);
+        return stored ? JSON.parse(stored) : null;
+      } catch (error) {
+        console.error('Error loading toasts:', error);
+        return null;
+      }
+    }
+    return null;
+  },
 };
