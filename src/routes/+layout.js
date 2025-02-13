@@ -1,1 +1,2 @@
-import '../lib/polyfills';
+// export const ssr = false;
+// export const csr = true;
