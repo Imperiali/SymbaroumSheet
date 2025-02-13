@@ -8,8 +8,14 @@ const config = {
 		adapter: adapter(),
 		serviceWorker: {
 			register: true
+		},
+		env: {
+			dir: process.cwd()
+		},
+		csrf: {
+			checkOrigin: false
 		}
-	},
+	}
 };
 
 export default config;

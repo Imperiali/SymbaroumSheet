@@ -20,13 +20,14 @@
             player = await getPlayer($user.uid);
             
             console.log(data);
+            console.log(player);
 
             if (!player) {
                 goto('/');
                 return;
             }
 
-            if (player.name !== data.username) {
+            if (player.name !== data.player.name) {
                 goto('/');
                 return;
             }

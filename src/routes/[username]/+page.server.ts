@@ -1,5 +1,4 @@
-import { db } from '$lib/firebase/config';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '$lib/firebase/admin';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -7,29 +6,34 @@ export const load: PageServerLoad = async ({ params }) => {
     const { username } = params;
 
     try {
-        const playersRef = collection(db, 'players');
-        const q = query(playersRef, where('name', '==', username));
-        const querySnapshot = await getDocs(q);
+        const playersSnapshot = await db
+            .collection('players')
+            .where('name', '==', username)
+            .get();
 
-        if (querySnapshot.empty) {
+        if (playersSnapshot.empty) {
             throw error(404, 'Player not found');
         }
 
-        const playerDoc = querySnapshot.docs[0];
+        const playerDoc = playersSnapshot.docs[0];
         const playerId = playerDoc.id;
 
-        const charactersRef = collection(db, 'characters');
-        const characterQuery = query(charactersRef, where('playerId', '==', playerId));
-        const characterSnapshot = await getDocs(characterQuery);
+        const charactersSnapshot = await db
+            .collection('characters')
+            .where('playerId', '==', playerId)
+            .get();
 
-        const characters = characterSnapshot.docs.map(doc => doc.data());
+        const characters = charactersSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
 
         return {
-            username,
+            player: { id: playerId, ...playerDoc.data() },
             characters
         };
-    } catch (e) {
-        console.error('Error loading player data:', e);
-        throw error(404, 'Player not found');
+    } catch (err) {
+        console.error('Error loading player data:', err);
+        throw error(500, 'Internal Server Error');
     }
 };
