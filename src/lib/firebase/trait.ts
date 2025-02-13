@@ -20,4 +20,15 @@ export class TraitService {
     }
     return null;
   }
+
+  static async getTrait(param: String): Promise<Trait | null> {
+    let traitList = await this.getTraits();
+    
+    if(traitList == null || traitList == undefined || traitList?.length <= 0 ) {
+      return null;
+    }
+
+    return traitList.find((trait => trait.name == param))  ?? null;
+    
+  }
 }
