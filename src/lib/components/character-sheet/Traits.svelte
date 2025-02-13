@@ -14,12 +14,12 @@
 	let selectedTrait: Trait | undefined;
 
 	function addTrait(newTrait: Trait) {
-		console.log(newTrait);
 		character.update((char) => ({
 			...char,
 			traits: [...char.traits, newTrait]
 		}));
 		showModal = false;
+		selectedTrait = undefined;
 	}
 
 	async function openModal() {
