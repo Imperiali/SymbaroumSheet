@@ -13,11 +13,25 @@
         });
     });
 
+    onMount(() => {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .catch((error) => {
+                    console.error('Service worker registration failed:', error);
+                });
+        }
+    });
+
     let { children } = $props();
 </script>
 
 <svelte:head>
     <title>Ficha de Personagem Symbaroum</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4a5568">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
 </svelte:head>
 
 {#if $loading}

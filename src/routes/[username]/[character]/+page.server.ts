@@ -31,15 +31,14 @@ export const load: PageServerLoad = async ({ params, locals }) => {
         }
 
         const characterDoc = characterSnapshot.docs[0];
-        const character = characterDoc.data();
-
+        const character = { id: characterDoc.id, ...characterDoc.data(), playerId };
+        
         return {
-            username,
             character,
-            isOwner: userId ? character.playerId === userId : false
+            isOwner: userId === playerId
         };
-    } catch (e) {
-        console.error('Error loading character:', e);
-        throw error(404, 'Character not found');
+    } catch (err) {
+        console.error('Error loading character:', err);
+        throw error(500, 'Failed to load character');
     }
 };
