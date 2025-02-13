@@ -1,47 +1,90 @@
 <script lang="ts">
-    import { character } from '$lib/stores/character';
+    import type { Character } from '$lib/types/character';
     import Section from '$lib/components/common/Section.svelte';
 
+    export let character: Character;
+    export let handleUpdate: (updates: Partial<Character>) => void;
+    export let readOnly = false;
+
+    $: artifacts = character.artifacts || [];
+
     function addArtifact() {
-        character.update(char => ({
-            ...char,
-            artifacts: [...char.artifacts, {
+        if (!readOnly) {
+            const updatedArtifacts = [...artifacts, {
                 name: '',
                 powers: '',
                 corruption: '',
                 bonus: ''
-            }]
-        }));
+            }];
+            handleUpdate({
+                artifacts: updatedArtifacts
+            });
+        }
     }
 
     function removeArtifact(index: number) {
-        character.update(char => ({
-            ...char,
-            artifacts: char.artifacts.filter((_, i) => i !== index)
-        }));
+        if (!readOnly) {
+            const updatedArtifacts = artifacts.filter((_, i) => i !== index);
+            handleUpdate({ artifacts: updatedArtifacts });
+        }
+    }
+
+    function updateArtifact(index: number, field: string, value: string) {
+        if (!readOnly) {
+            const updatedArtifacts = [...artifacts];
+            updatedArtifacts[index] = {
+                ...updatedArtifacts[index],
+                [field]: value
+            };
+            handleUpdate({ artifacts: updatedArtifacts });
+        }
     }
 </script>
 
-<Section title="Artefatos e Tesouros Místicos" let:locked>
-    {#each $character.artifacts as artifact, i}
+<Section title="Artefatos e Tesouros Místicos" let:locked {readOnly}>
+    {#each artifacts as artifact, i}
         <div class="artifact-entry">
             <div class="field">
                 <label for="artifact-name-{i}">Nome:</label>
-                <input type="text" id="artifact-name-{i}" bind:value={artifact.name} disabled={locked} />
+                <input 
+                    type="text" 
+                    id="artifact-name-{i}" 
+                    value={artifact.name}
+                    on:input={(e) => updateArtifact(i, 'name', e.currentTarget.value)}
+                    disabled={locked || readOnly} 
+                />
             </div>
             <div class="field">
                 <label for="artifact-powers-{i}">Poderes:</label>
-                <input type="text" id="artifact-powers-{i}" bind:value={artifact.powers} disabled={locked} />
+                <input 
+                    type="text" 
+                    id="artifact-powers-{i}" 
+                    value={artifact.powers}
+                    on:input={(e) => updateArtifact(i, 'powers', e.currentTarget.value)}
+                    disabled={locked || readOnly} 
+                />
             </div>
             <div class="field">
                 <label for="artifact-corruption-{i}">Corrupção:</label>
-                <input type="text" id="artifact-corruption-{i}" bind:value={artifact.corruption} disabled={locked} />
+                <input 
+                    type="text" 
+                    id="artifact-corruption-{i}" 
+                    value={artifact.corruption}
+                    on:input={(e) => updateArtifact(i, 'corruption', e.currentTarget.value)}
+                    disabled={locked || readOnly} 
+                />
             </div>
             <div class="field">
                 <label for="artifact-bonus-{i}">Bônus/Efeito:</label>
-                <input type="text" id="artifact-bonus-{i}" bind:value={artifact.bonus} disabled={locked} />
+                <input 
+                    type="text" 
+                    id="artifact-bonus-{i}" 
+                    value={artifact.bonus}
+                    on:input={(e) => updateArtifact(i, 'bonus', e.currentTarget.value)}
+                    disabled={locked || readOnly} 
+                />
             </div>
-            {#if !locked}
+            {#if !locked && !readOnly}
                 <button class="remove-button" on:click={() => removeArtifact(i)}>
                     <span class="material-icons">delete</span>
                     Remover
@@ -49,8 +92,11 @@
             {/if}
         </div>
     {/each}
-    {#if !locked}
-        <button class="add-button" on:click={addArtifact}>+ Adicionar Artefato</button>
+    {#if !locked && !readOnly}
+        <button class="add-button" on:click={addArtifact}>
+            <span class="material-icons">add</span>
+            Adicionar Artefato
+        </button>
     {/if}
 </Section>
 

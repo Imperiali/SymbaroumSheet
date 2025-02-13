@@ -1,63 +1,89 @@
 <script lang="ts">
+	import type { Character } from '$lib/types/character';
 	import Section from '$lib/components/common/Section.svelte';
-	import { character } from '$lib/stores/character';
 
-	export const abilities: {
-		name: string;
-		effect: string;
-		type: string;
-		classification: 'N' | 'A' | 'M';
-	}[] = [];
+	export let character: Character;
+	export let handleUpdate: (updates: Partial<Character>) => Promise<void>;
+	export let readOnly = false;
 
 	function addAbility() {
-		character.update((char) => ({
-			...char,
-			abilities: [
-				...char.abilities,
-				{
-					name: '',
-					effect: '',
-					type: '',
-					classification: 'N'
-				}
-			]
-		}));
+		if (!readOnly) {
+			handleUpdate({
+				abilities: [
+					...character.abilities,
+					{
+						name: '',
+						effect: '',
+						type: '',
+						classification: 'N'
+					}
+				]
+			});
+		}
 	}
 
 	function removeAbility(index: number) {
-		character.update((char) => ({
-			...char,
-			abilities: char.abilities.filter((_, i) => i !== index)
-		}));
+		if (!readOnly) {
+			handleUpdate({
+				abilities: character.abilities.filter((_, i) => i !== index)
+			});
+		}
+	}
+
+	function updateAbility(index: number, field: string, value: string) {
+		if (!readOnly) {
+			handleUpdate({
+				abilities: character.abilities.map((ability, i) =>
+					i === index ? { ...ability, [field]: value } : ability
+				)
+			});
+		}
 	}
 </script>
 
-<Section title="Habilidades e Poderes" let:locked>
+<Section title="Habilidades e Poderes" let:locked {readOnly}>
 	<div class="abilities-list">
-		{#each $character.abilities as ability, i}
+		{#each character.abilities as ability, i}
 			<div class="ability-item">
 				<div class="field">
 					<label for="ability-name-{i}">Nome:</label>
-					<input id="ability-name-{i}" type="text" bind:value={ability.name} disabled={locked} />
+					<input 
+						id="ability-name-{i}" 
+						type="text" 
+						value={ability.name} 
+						disabled={locked || readOnly}
+						on:input={(e) => updateAbility(i, 'name', e.currentTarget.value)}
+					/>
 				</div>
 
 				<div class="field">
 					<label for="ability-effect-{i}">Efeito:</label>
-					<textarea id="ability-effect-{i}" bind:value={ability.effect} disabled={locked}
+					<textarea 
+						id="ability-effect-{i}" 
+						value={ability.effect} 
+						disabled={locked || readOnly}
+						on:input={(e) => updateAbility(i, 'effect', e.currentTarget.value)}
 					></textarea>
 				</div>
 
 				<div class="field">
 					<label for="ability-type-{i}">Tipo:</label>
-					<input id="ability-type-{i}" type="text" bind:value={ability.type} disabled={locked} />
+					<input 
+						id="ability-type-{i}" 
+						type="text" 
+						value={ability.type} 
+						disabled={locked || readOnly}
+						on:input={(e) => updateAbility(i, 'type', e.currentTarget.value)}
+					/>
 				</div>
 
 				<div class="field">
 					<label for="ability-classification-{i}">Classificação:</label>
 					<select
 						id="ability-classification-{i}"
-						bind:value={ability.classification}
-						disabled={locked}
+						value={ability.classification}
+						disabled={locked || readOnly}
+						on:change={(e) => updateAbility(i, 'classification', e.currentTarget.value)}
 					>
 						<option value="N">Novato</option>
 						<option value="A">Adepto</option>
@@ -65,7 +91,7 @@
 					</select>
 				</div>
 
-				{#if !locked}
+				{#if !locked && !readOnly}
 					<button class="remove-btn" on:click={() => removeAbility(i)}>
 						<span class="material-icons">delete</span>
 						Remover
@@ -74,7 +100,7 @@
 			</div>
 		{/each}
 
-		{#if !locked}
+		{#if !locked && !readOnly}
 			<button class="add-btn" on:click={addAbility}>
 				<span class="material-icons">add</span>
 				Adicionar Habilidade

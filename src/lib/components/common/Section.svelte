@@ -4,24 +4,29 @@
 
 	export let title: string;
 	export let locked = false;
+	export let readOnly = false;
 	let visible = true;
 
 	function toggleLock() {
-		locked = !locked;
-		dispatch('lockChange', locked);
+		if (!readOnly) {
+			locked = !locked;
+			dispatch('lockChange', locked);
+		}
 	}
 </script>
 
 <div class="section">
 	<div class="header">
 		<button class="toggle-btn" on:click={() => (visible = !visible)}><h2>{title}</h2></button>
-		<button
-			class="lock-btn"
-			on:click={toggleLock}
-			title={locked ? 'Desbloquear seção' : 'Bloquear seção'}
-		>
-			<span class="material-icons">{locked ? 'lock' : 'lock_open'}</span>
-		</button>
+		{#if !readOnly}
+			<button
+				class="lock-btn"
+				on:click={toggleLock}
+				title={locked ? 'Desbloquear seção' : 'Bloquear seção'}
+			>
+				<span class="material-icons">{locked ? 'lock' : 'lock_open'}</span>
+			</button>
+		{/if}
 	</div>
 	{#if visible}
 		<slot {locked} />

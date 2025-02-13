@@ -1,16 +1,18 @@
 <script lang="ts">
-	import { character } from '$lib/stores/character';
-	import Section from '$lib/components/common/Section.svelte';
 	import type { Character } from '$lib/types/character';
+	import Section from '$lib/components/common/Section.svelte';
 	import { toasts } from '$lib/stores/toast';
 	import type { Toast } from '$lib/types/toast';
-  import dice from '$lib/images/d20-icon.png';
-  import { getRaces, type Race } from '$lib/types/race';
+	import dice from '$lib/images/d20-icon.png';
+	import { getRaces, type Race } from '$lib/types/race';
 	import { getOccupations, type Occupation } from '$lib/types/occupation';
 	import { onMount } from 'svelte';
-	
-  
-  let races: Race[] = [];
+
+	export let character: Character;
+	export let handleUpdate: (updates: Partial<Character>) => Promise<void>;
+	export let readOnly = false;
+
+	let races: Race[] = [];
 	let occupations: Occupation[] = [];
 	onMount(async () => {
 		races = await getRaces();
@@ -20,13 +22,14 @@
 	type AttributeName = keyof Character['attributes'];
 
 	function updateAttribute(name: AttributeName, value: number) {
-		character.update((char) => ({
-			...char,
-			attributes: {
-				...char.attributes,
-				[name]: value
-			}
-		}));
+		if (!readOnly) {
+			handleUpdate({
+				attributes: {
+					...character.attributes,
+					[name]: value
+				}
+			});
+		}
 	}
 
 	function updateToast(newToast: Toast) {
@@ -56,27 +59,26 @@
 	];
 </script>
 
-<Section title="Atributos" let:locked>
+<Section title="Atributos" let:locked {readOnly}>
 	<div class="attributes-grid">
 		{#each attributes as { name, label }}
 			<div class="attribute">
 				<div class="header-container">
-          <label for={name}
-            >{label}:</label
-          >
-          <button on:click={() => rollD20($character.attributes[name], label)}>
-            <img src={dice} alt="dice icon" />
-          </button>
-
-        </div>
+					<label for={name}>{label}:</label>
+					{#if !readOnly}
+						<button on:click={() => rollD20(character.attributes[name], label)}>
+							<img src={dice} alt="dice icon" />
+						</button>
+					{/if}
+				</div>
 				<input
 					type="number"
 					id={name}
 					min="5"
 					max="15"
-					bind:value={$character.attributes[name]}
+					value={character.attributes[name]}
 					on:input={(e) => updateAttribute(name, parseInt(e.currentTarget.value) || 10)}
-					disabled={locked}
+					disabled={locked || readOnly}
 				/>
 			</div>
 		{/each}
@@ -89,17 +91,17 @@
 		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 		gap: 15px;
 	}
-  .header-container {
-    display: flex;
-    justify-content: space-between;
+	.header-container {
+		display: flex;
+		justify-content: space-between;
     button {
-      width: fit-content;
-    }
-  }
-  img {
-    width: 20px;
-    height: 20px;
-  }
+		width: fit-content;
+	}
+	}
+	img {
+		width: 20px;
+		height: 20px;
+	}
 	.attribute {
 		display: flex;
 		flex-direction: column;
@@ -153,6 +155,6 @@
 
     label {
 		font-size: 0.75em;
-    }
+		}
 	}
 </style>

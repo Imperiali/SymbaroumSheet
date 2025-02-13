@@ -1,49 +1,68 @@
 <script lang="ts">
-	import { character } from '$lib/stores/character';
+	import type { Character } from '$lib/types/character';
 	import Section from '$lib/components/common/Section.svelte';
 
+	export let character: Character;
+	export let handleUpdate: (updates: Partial<Character>) => void;
+	export let readOnly = false;
+
 	function addEquipment() {
-		character.update((char) => ({
-			...char,
-			equipment: [
-				...char.equipment,
-				{
-					name: '',
-					description: ''
-				}
-			]
-		}));
+		if (!readOnly) {
+			handleUpdate({
+				equipment: [
+					...character.equipment,
+					{
+						name: '',
+						description: ''
+					}
+				]
+			});
+		}
 	}
 
 	function removeEquipment(index: number) {
-		character.update((char) => ({
-			...char,
-			equipment: char.equipment.filter((_, i) => i !== index)
-		}));
+		if (!readOnly) {
+			handleUpdate({
+				equipment: character.equipment.filter((_, i) => i !== index)
+			});
+		}
+	}
+
+	function updateEquipment(index: number, field: string, value: string) {
+		if (!readOnly) {
+			const updatedEquipment = [...character.equipment];
+			updatedEquipment[index] = {
+				...updatedEquipment[index],
+				[field]: value
+			};
+			handleUpdate({ equipment: updatedEquipment });
+		}
 	}
 </script>
 
-<Section title="Equipamento" let:locked>
-	{#each $character.equipment as item, index}
+<Section title="Equipamento" let:locked {readOnly}>
+	{#each character.equipment as item, index}
 		<div class="equipment-item">
 			<div class="field">
 				<label for="equipment-name-{index}">Nome:</label>
 				<input
 					type="text"
 					id="equipment-name-{index}"
-					bind:value={item.name}
-					disabled={locked}
+					value={item.name}
+					on:input={(e) => updateEquipment(index, 'name', e.currentTarget.value)}
+					disabled={locked || readOnly}
 				/>
 			</div>
 			<div class="field">
 				<label for="equipment-description-{index}">Descrição:</label>
 				<textarea
 					id="equipment-description-{index}"
-					bind:value={item.description}
-					disabled={locked}
+					value={item.description}
+					on:input={(e) => updateEquipment(index, 'description', e.currentTarget.value)}
+					disabled={locked || readOnly}
 				></textarea>
 			</div>
-			{#if !locked}
+			{#if !locked && !readOnly}
 				<button class="remove-btn" on:click={() => removeEquipment(index)}>
 					<span class="material-icons">delete</span>
 					Remover
@@ -51,7 +70,7 @@
 			{/if}
 		</div>
 	{/each}
-	{#if !locked}
+	{#if !locked && !readOnly}
 		<button class="add-btn" on:click={addEquipment}>
 			<span class="material-icons">add</span>
 			Adicionar Equipamento

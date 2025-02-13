@@ -1,47 +1,88 @@
 <script lang="ts">
-    import { character } from '$lib/stores/character';
+    import type { Character } from '$lib/types/character';
     import Section from '$lib/components/common/Section.svelte';
 
+    export let character: Character;
+    export let handleUpdate: (updates: Partial<Character>) => void;
+    export let readOnly = false;
+
     function addCompanion() {
-        character.update(char => ({
-            ...char,
-            companions: [...char.companions, {
-                name: '',
-                race: '',
-                occupation: '',
-                player: ''
-            }]
-        }));
+        if (!readOnly) {
+            handleUpdate({
+                companions: [...character.companions, {
+                    name: '',
+                    race: '',
+                    occupation: '',
+                    player: ''
+                }]
+            });
+        }
     }
 
     function removeCompanion(index: number) {
-        character.update(char => ({
-            ...char,
-            companions: char.companions.filter((_, i) => i !== index)
-        }));
+        if (!readOnly) {
+            handleUpdate({
+                companions: character.companions.filter((_, i) => i !== index)
+            });
+        }
+    }
+
+    function updateCompanion(index: number, field: string, value: string) {
+        if (!readOnly) {
+            const updatedCompanions = [...character.companions];
+            updatedCompanions[index] = {
+                ...updatedCompanions[index],
+                [field]: value
+            };
+            handleUpdate({ companions: updatedCompanions });
+        }
     }
 </script>
 
-<Section title="Amigos e Companheiros" let:locked>
-    {#each $character.companions as companion, index}
+<Section title="Amigos e Companheiros" let:locked {readOnly}>
+    {#each character.companions as companion, index}
         <div class="companion-entry">
             <div class="field">
                 <label for="companion-name-{index}">Nome:</label>
-                <input type="text" id="companion-name-{index}" bind:value={companion.name} disabled={locked} />
+                <input 
+                    type="text" 
+                    id="companion-name-{index}" 
+                    value={companion.name}
+                    on:input={(e) => updateCompanion(index, 'name', e.currentTarget.value)}
+                    disabled={locked || readOnly} 
+                />
             </div>
             <div class="field">
                 <label for="companion-race-{index}">Raça:</label>
-                <input type="text" id="companion-race-{index}" bind:value={companion.race} disabled={locked} />
+                <input 
+                    type="text" 
+                    id="companion-race-{index}" 
+                    value={companion.race}
+                    on:input={(e) => updateCompanion(index, 'race', e.currentTarget.value)}
+                    disabled={locked || readOnly} 
+                />
             </div>
             <div class="field">
                 <label for="companion-occupation-{index}">Ocupação:</label>
-                <input type="text" id="companion-occupation-{index}" bind:value={companion.occupation} disabled={locked} />
+                <input 
+                    type="text" 
+                    id="companion-occupation-{index}" 
+                    value={companion.occupation}
+                    on:input={(e) => updateCompanion(index, 'occupation', e.currentTarget.value)}
+                    disabled={locked || readOnly} 
+                />
             </div>
             <div class="field">
-                <label for="companion-player-{index}">Dinheiro:</label>
-                <input type="text" id="companion-player-{index}" bind:value={companion.player} disabled={locked} />
+                <label for="companion-player-{index}">Jogador:</label>
+                <input 
+                    type="text" 
+                    id="companion-player-{index}" 
+                    value={companion.player}
+                    on:input={(e) => updateCompanion(index, 'player', e.currentTarget.value)}
+                    disabled={locked || readOnly} 
+                />
             </div>
-            {#if !locked}
+            {#if !locked && !readOnly}
                 <button class="remove-button" on:click={() => removeCompanion(index)}>
                     <span class="material-icons">delete</span>
                     Remover
@@ -49,8 +90,11 @@
             {/if}
         </div>
     {/each}
-    {#if !locked}
-        <button class="add-button" on:click={addCompanion}>+ Adicionar Companheiro</button>
+    {#if !locked && !readOnly}
+        <button class="add-button" on:click={addCompanion}>
+            <span class="material-icons">add</span>
+            Adicionar Companheiro
+        </button>
     {/if}
 </Section>
 

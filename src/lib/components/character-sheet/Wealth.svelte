@@ -1,20 +1,56 @@
 <script lang="ts">
-    import { character } from '$lib/stores/character';
+    import type { Character } from '$lib/types/character';
     import Section from '$lib/components/common/Section.svelte';
+
+    export let character: Character;
+    export let handleUpdate: (updates: Partial<Character>) => void;
+    export let readOnly = false;
+
+    function updateMoney(currency: 'thaler' | 'shilling' | 'orteg', value: number) {
+        if (!readOnly) {
+            handleUpdate({
+                money: {
+                    ...character.money,
+                    [currency]: value
+                }
+            });
+        }
+    }
 </script>
 
-<Section title="Riqueza" let:locked>
+<Section title="Riqueza" let:locked {readOnly}>
     <div class="field">
         <label for="thaler">Thalers:</label>
-        <input type="number" id="thaler" bind:value={$character.money.thaler} min="0" disabled={locked} />
+        <input 
+            type="number" 
+            id="thaler" 
+            value={character.money.thaler} 
+            on:input={(e) => updateMoney('thaler', +e.currentTarget.value)}
+            min="0" 
+            disabled={locked || readOnly} 
+        />
     </div>
     <div class="field">
         <label for="shilling">Shillings:</label>
-        <input type="number" id="shilling" bind:value={$character.money.shilling} min="0" disabled={locked} />
+        <input 
+            type="number" 
+            id="shilling" 
+            value={character.money.shilling} 
+            on:input={(e) => updateMoney('shilling', +e.currentTarget.value)}
+            min="0" 
+            disabled={locked || readOnly} 
+        />
     </div>
     <div class="field">
         <label for="orteg">Ortegs:</label>
-        <input type="number" id="orteg" bind:value={$character.money.orteg} min="0" disabled={locked} />
+        <input 
+            type="number" 
+            id="orteg" 
+            value={character.money.orteg} 
+            on:input={(e) => updateMoney('orteg', +e.currentTarget.value)}
+            min="0" 
+            disabled={locked || readOnly} 
+        />
     </div>
 </Section>
 
