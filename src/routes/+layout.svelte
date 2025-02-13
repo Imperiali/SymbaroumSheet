@@ -3,19 +3,13 @@
     import { onMount } from 'svelte';
     import { auth } from '$lib/firebase/config';
     import { user, loading } from '$lib/stores/auth';
-    import { goto } from '$app/navigation';
     import { onAuthStateChanged } from 'firebase/auth';
-    import { page } from '$app/stores';
     import Navigation from '$lib/components/Navigation.svelte';
 
     onMount(() => {
         return onAuthStateChanged(auth, (currentUser) => {
             user.set(currentUser);
             loading.set(false);
-
-            if (!currentUser && !$page.url.pathname.startsWith('/sign')) {
-                goto('/');
-            }
         });
     });
 

@@ -4,15 +4,18 @@
 
 	export let character: Character;
 	export let handleUpdate: (updates: Partial<Character>) => Promise<void>;
+	export let readOnly = false;
 
 	function updateField(field: string, value: string) {
-		handleUpdate({
-			[field]: value
-		});
+		if (!readOnly) {
+			handleUpdate({
+				[field]: value
+			});
+		}
 	}
 </script>
 
-<Section title="Informações Pessoais" let:locked>
+<Section title="Informações Pessoais" let:locked {readOnly}>
 	<div class="personal-info">
 		<div class="info-fields">
 			<div class="basic-info">
@@ -22,7 +25,7 @@
 						<input
 							type="text"
 							id="idade"
-							disabled={locked}
+							disabled={locked || readOnly}
 							value={character.idade ?? ''}
 							on:input={(e) => updateField('idade', e.currentTarget.value)}
 						/>
@@ -32,7 +35,7 @@
 						<input
 							type="text"
 							id="altura"
-							disabled={locked}
+							disabled={locked || readOnly}
 							value={character.altura ?? ''}
 							on:input={(e) => updateField('altura', e.currentTarget.value)}
 						/>
@@ -42,7 +45,7 @@
 						<input
 							type="text"
 							id="peso"
-							disabled={locked}
+							disabled={locked || readOnly}
 							value={character.peso ?? ''}
 							on:input={(e) => updateField('peso', e.currentTarget.value)}
 						/>
@@ -55,7 +58,7 @@
 					<label for="aparencia">APARÊNCIA</label>
 					<textarea
 						id="aparencia"
-						disabled={locked}
+						disabled={locked || readOnly}
 						value={character.aparencia ?? ''}
 						on:input={(e) => updateField('aparencia', e.currentTarget.value)}
 					></textarea>
@@ -64,7 +67,7 @@
 					<label for="historico">HISTÓRICO</label>
 					<textarea
 						id="historico"
-						disabled={locked}
+						disabled={locked || readOnly}
 						value={character.historico ?? ''}
 						on:input={(e) => updateField('historico', e.currentTarget.value)}
 					></textarea>
@@ -73,7 +76,7 @@
 					<label for="objetivoPessoal">OBJETIVO PESSOAL</label>
 					<textarea
 						id="objetivoPessoal"
-						disabled={locked}
+						disabled={locked || readOnly}
 						value={character.objetivoPessoal ?? ''}
 						on:input={(e) => updateField('objetivoPessoal', e.currentTarget.value)}
 					></textarea>
@@ -86,20 +89,20 @@
 				{#if character.imagemUrl}
 					<div class="image-wrapper">
 						<img src={character.imagemUrl} alt="Imagem do Personagem" />
-						<button
-							class="reset-btn"
-							disabled={locked}
-							on:click={() => updateField('imagemUrl', '')}
-							title="Limpar imagem"
-						>
+						{#if !locked && !readOnly}
+							<button
+								class="reset-btn"
+								on:click={() => updateField('imagemUrl', '')}
+								title="Limpar imagem"
+							>
 							<span class="material-icons">restart_alt</span>
-						</button>
+							</button>
+						{/if}
 					</div>
-				{:else}
+				{:else if !locked && !readOnly}
 					<div class="image-placeholder">
 						<input
 							type="text"
-							disabled={locked}
 							placeholder="URL da imagem"
 							value={character.imagemUrl ?? ''}
 							on:input={(e) => updateField('imagemUrl', e.currentTarget.value)}

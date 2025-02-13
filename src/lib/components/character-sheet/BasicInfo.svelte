@@ -7,6 +7,7 @@
 
 	export let character: Character;
 	export let handleUpdate: (updates: Partial<Character>) => Promise<void>;
+	export let readOnly = false;
 
 	let races: Race[] = [];
 	let occupations: Occupation[] = [];
@@ -18,7 +19,9 @@
 	let visible = true;
 
 	function updateField(field: string, value: string | number) {
+		if (!readOnly) {
 		handleUpdate({ [field]: value });
+	}
 	}
 
 	$: vitalityPercentage =
@@ -48,7 +51,7 @@
 					id="occupation"
 					value={character.occupation}
 					on:change={(e) => updateField('occupation', e.currentTarget.value)}
-					disabled={locked}
+					disabled={locked || readOnly}
 				>
 					{#each occupations as occupation}
 						<option value={occupation.id}>{occupation.name}</option>
@@ -96,7 +99,7 @@
 					<div class="field-container">
 						<label for="currentVitality">Atual:</label>
 						<input
-							disabled={locked}
+							disabled={locked || readOnly}
 							type="number"
 							id="currentVitality"
 							value={character.vitality.current}
@@ -113,7 +116,7 @@
 					<div class="field-container">
 						<label for="maxVitality">Máximo:</label>
 						<input
-							disabled={locked}
+							disabled={locked || readOnly}
 							type="number"
 							id="maxVitality"
 							value={character.vitality.max}
@@ -130,7 +133,7 @@
 					<div class="field-container">
 						<label for="painThreshold">Limiar:</label>
 						<input
-							disabled={locked}
+							disabled={locked || readOnly}
 							type="number"
 							id="painThreshold"
 							value={character.painThreshold}
@@ -144,7 +147,7 @@
 			<span>Experiência</span>
 			<div class="field-container">
 				<input
-					disabled={locked}
+					disabled={locked || readOnly}
 					type="number"
 					id="current-experience"
 					value={character.currentExperience}
@@ -154,7 +157,7 @@
 			</div>
 			<div class="field-container">
 				<input
-					disabled={locked}
+					disabled={locked || readOnly}
 					type="number"
 					id="experience"
 					value={character.experience}
@@ -170,7 +173,7 @@
 				<div class="field-container">
 					<label for="currentCorruption">Atual:</label>
 					<input
-						disabled={locked}
+						disabled={locked || readOnly}
 						type="number"
 						id="currentCorruption"
 						value={character.corruption.current}
@@ -187,7 +190,7 @@
 				<div class="field-container">
 					<label for="permanentCorruption">Permanente:</label>
 					<input
-						disabled={locked}
+						disabled={locked || readOnly}
 						type="number"
 						id="permanentCorruption"
 						value={character.corruption.permanent}
@@ -204,7 +207,7 @@
 				<div class="field-container">
 					<label for="corruptionThreshold">Limiar:</label>
 					<input
-						disabled={locked}
+						disabled={locked || readOnly}
 						type="number"
 						id="corruptionThreshold"
 						value={character.corruptionThreshold}
@@ -227,7 +230,7 @@
 							id="race"
 							value={character.race}
 							on:change={(e) => updateField('race', e.currentTarget.value)}
-							disabled={locked}
+							disabled={locked || readOnly}
 						>
 							{#each races as race}
 								<option value={race.id}>{race.name}</option>
@@ -239,7 +242,7 @@
 				<div class="field shadow-field">
 					<label for="shadow">Sombra:</label>
 					<input
-						disabled={locked}
+						disabled={locked || readOnly}
 						type="text"
 						id="shadow"
 						value={character.shadow}
@@ -250,6 +253,7 @@
 					<label for="quote">Citação:</label>
 					<textarea
 						id="quote"
+						disabled={locked || readOnly}
 						value={character.quote}
 						on:input={(e) => updateField('quote', e.currentTarget.value)}
 					></textarea>

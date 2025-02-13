@@ -4,35 +4,42 @@
 
     export let character: Character;
     export let handleUpdate: (updates: Partial<Character>) => void;
+    export let readOnly = false;
 
     function addCompanion() {
-        handleUpdate({
-            companions: [...character.companions, {
-                name: '',
-                race: '',
-                occupation: '',
-                player: ''
-            }]
-        });
+        if (!readOnly) {
+            handleUpdate({
+                companions: [...character.companions, {
+                    name: '',
+                    race: '',
+                    occupation: '',
+                    player: ''
+                }]
+            });
+        }
     }
 
     function removeCompanion(index: number) {
-        handleUpdate({
-            companions: character.companions.filter((_, i) => i !== index)
-        });
+        if (!readOnly) {
+            handleUpdate({
+                companions: character.companions.filter((_, i) => i !== index)
+            });
+        }
     }
 
     function updateCompanion(index: number, field: string, value: string) {
-        const updatedCompanions = [...character.companions];
-        updatedCompanions[index] = {
-            ...updatedCompanions[index],
-            [field]: value
-        };
-        handleUpdate({ companions: updatedCompanions });
+        if (!readOnly) {
+            const updatedCompanions = [...character.companions];
+            updatedCompanions[index] = {
+                ...updatedCompanions[index],
+                [field]: value
+            };
+            handleUpdate({ companions: updatedCompanions });
+        }
     }
 </script>
 
-<Section title="Amigos e Companheiros" let:locked>
+<Section title="Amigos e Companheiros" let:locked {readOnly}>
     {#each character.companions as companion, index}
         <div class="companion-entry">
             <div class="field">
@@ -42,7 +49,7 @@
                     id="companion-name-{index}" 
                     value={companion.name}
                     on:input={(e) => updateCompanion(index, 'name', e.currentTarget.value)}
-                    disabled={locked} 
+                    disabled={locked || readOnly} 
                 />
             </div>
             <div class="field">
@@ -52,7 +59,7 @@
                     id="companion-race-{index}" 
                     value={companion.race}
                     on:input={(e) => updateCompanion(index, 'race', e.currentTarget.value)}
-                    disabled={locked} 
+                    disabled={locked || readOnly} 
                 />
             </div>
             <div class="field">
@@ -62,7 +69,7 @@
                     id="companion-occupation-{index}" 
                     value={companion.occupation}
                     on:input={(e) => updateCompanion(index, 'occupation', e.currentTarget.value)}
-                    disabled={locked} 
+                    disabled={locked || readOnly} 
                 />
             </div>
             <div class="field">
@@ -72,18 +79,18 @@
                     id="companion-player-{index}" 
                     value={companion.player}
                     on:input={(e) => updateCompanion(index, 'player', e.currentTarget.value)}
-                    disabled={locked} 
+                    disabled={locked || readOnly} 
                 />
             </div>
-            {#if !locked}
-                <button class="remove-btn" on:click={() => removeCompanion(index)}>
+            {#if !locked && !readOnly}
+                <button class="remove-button" on:click={() => removeCompanion(index)}>
                     <span class="material-icons">delete</span>
                     Remover
                 </button>
             {/if}
         </div>
     {/each}
-    {#if !locked}
+    {#if !locked && !readOnly}
         <button class="add-button" on:click={addCompanion}>
             <span class="material-icons">add</span>
             Adicionar Companheiro

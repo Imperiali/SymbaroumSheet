@@ -4,6 +4,7 @@ import { CharacterService } from '$lib/firebase/character';
 import { user } from './auth';
 import { get } from 'svelte/store';
 import { storageService } from '$lib/services/storage';
+import { debounce } from 'lodash-es';
 
 const createCharacterStore = () => {
     const defaultCharacter: Character = {
@@ -56,20 +57,35 @@ const createCharacterStore = () => {
     const storedCharacter = storageService.loadCharacter();
     const { subscribe, set, update } = writable<Character>(storedCharacter || defaultCharacter);
 
+    const debouncedUpdate = debounce(async (character: Character) => {
+        try {
+            const currentUser = get(user);
+            if (!currentUser?.uid) return;
+
+            await CharacterService.update(character.name, currentUser.uid, character);
+            storageService.saveCharacter(character);
+        } catch (error) {
+            console.error('Error updating character:', error);
+            const lastGoodState = storageService.loadCharacter();
+            if (lastGoodState) {
+                set(lastGoodState);
+            }
+        }
+    }, 1000);
+
     return {
         subscribe,
         loadCharacter: (character: Character) => {
             storageService.saveCharacter(character);
             set(character);
         },
-        updateCharacter: async (updates: Partial<Character>) => {
-            const currentUser = get(user);
-            if (!currentUser?.uid) return;
-
-            const currentCharacter = get({ subscribe });
-            const updatedCharacter = await CharacterService.update(currentCharacter.name, currentUser.uid, updates);
-            storageService.saveCharacter(updatedCharacter);
-            set(updatedCharacter);
+        updateCharacter: (updates: Partial<Character>) => {
+            update(currentCharacter => {
+                const updatedCharacter = { ...currentCharacter, ...updates };
+                storageService.saveCharacter(updatedCharacter);
+                debouncedUpdate(updatedCharacter);
+                return updatedCharacter;
+            });
         },
         reset: () => {
             storageService.saveCharacter(defaultCharacter);

@@ -4,41 +4,44 @@
 
     export let character: Character;
     export let handleUpdate: (updates: Partial<Character>) => void;
+    export let readOnly = false;
 
     $: artifacts = character.artifacts || [];
 
-    $: console.log('Character in Artifacts:', character);
-
     function addArtifact() {
-        console.log('Current artifacts:', artifacts);
-        const updatedArtifacts = [...artifacts, {
-            name: '',
-            powers: '',
-            corruption: '',
-            bonus: ''
-        }];
-        console.log('Updated artifacts:', updatedArtifacts);
-        handleUpdate({
-            artifacts: updatedArtifacts
-        });
+        if (!readOnly) {
+            const updatedArtifacts = [...artifacts, {
+                name: '',
+                powers: '',
+                corruption: '',
+                bonus: ''
+            }];
+            handleUpdate({
+                artifacts: updatedArtifacts
+            });
+        }
     }
 
     function removeArtifact(index: number) {
-        const updatedArtifacts = artifacts.filter((_, i) => i !== index);
-        handleUpdate({ artifacts: updatedArtifacts });
+        if (!readOnly) {
+            const updatedArtifacts = artifacts.filter((_, i) => i !== index);
+            handleUpdate({ artifacts: updatedArtifacts });
+        }
     }
 
     function updateArtifact(index: number, field: string, value: string) {
-        const updatedArtifacts = [...artifacts];
-        updatedArtifacts[index] = {
-            ...updatedArtifacts[index],
-            [field]: value
-        };
-        handleUpdate({ artifacts: updatedArtifacts });
+        if (!readOnly) {
+            const updatedArtifacts = [...artifacts];
+            updatedArtifacts[index] = {
+                ...updatedArtifacts[index],
+                [field]: value
+            };
+            handleUpdate({ artifacts: updatedArtifacts });
+        }
     }
 </script>
 
-<Section title="Artefatos e Tesouros Místicos" let:locked>
+<Section title="Artefatos e Tesouros Místicos" let:locked {readOnly}>
     {#each artifacts as artifact, i}
         <div class="artifact-entry">
             <div class="field">
@@ -48,7 +51,7 @@
                     id="artifact-name-{i}" 
                     value={artifact.name}
                     on:input={(e) => updateArtifact(i, 'name', e.currentTarget.value)}
-                    disabled={locked} 
+                    disabled={locked || readOnly} 
                 />
             </div>
             <div class="field">
@@ -58,7 +61,7 @@
                     id="artifact-powers-{i}" 
                     value={artifact.powers}
                     on:input={(e) => updateArtifact(i, 'powers', e.currentTarget.value)}
-                    disabled={locked} 
+                    disabled={locked || readOnly} 
                 />
             </div>
             <div class="field">
@@ -68,7 +71,7 @@
                     id="artifact-corruption-{i}" 
                     value={artifact.corruption}
                     on:input={(e) => updateArtifact(i, 'corruption', e.currentTarget.value)}
-                    disabled={locked} 
+                    disabled={locked || readOnly} 
                 />
             </div>
             <div class="field">
@@ -78,10 +81,10 @@
                     id="artifact-bonus-{i}" 
                     value={artifact.bonus}
                     on:input={(e) => updateArtifact(i, 'bonus', e.currentTarget.value)}
-                    disabled={locked} 
+                    disabled={locked || readOnly} 
                 />
             </div>
-            {#if !locked}
+            {#if !locked && !readOnly}
                 <button class="remove-button" on:click={() => removeArtifact(i)}>
                     <span class="material-icons">delete</span>
                     Remover
@@ -89,7 +92,7 @@
             {/if}
         </div>
     {/each}
-    {#if !locked}
+    {#if !locked && !readOnly}
         <button class="add-button" on:click={addArtifact}>
             <span class="material-icons">add</span>
             Adicionar Artefato

@@ -16,8 +16,9 @@
     import { sectionVisibility } from '$lib/stores/visibility';
 
     export let character: Character;
+    export let readOnly = false;
 
-    $: if (character) {
+    $: if (character && !readOnly) {
         characterStore.loadCharacter(character);
     }
 
@@ -27,6 +28,8 @@
     let saveStatus = '';
 
     const handleUpdate = async (updates: Partial<Character>) => {
+        if (readOnly) return;
+        
         try {
             console.log('Updating character with:', updates);
             await characterStore.updateCharacter(updates);
@@ -49,48 +52,56 @@
         {saveStatus}
     </div>
 
+    {#if error}
+        <div class="error">
+            {error}
+        </div>
+    {/if}
+
     <div class="page full">
         {#if $sectionVisibility.basicInfo}
-            <BasicInfo character={currentCharacter} {handleUpdate} />
+            <BasicInfo character={currentCharacter} {handleUpdate} readOnly={readOnly} />
         {/if}
         {#if $sectionVisibility.attributes}
-            <Attributes character={currentCharacter} {handleUpdate} />
+            <Attributes character={currentCharacter} {handleUpdate} readOnly={readOnly} />
         {/if}
     </div>
 
     <div class="page-container">
         <div class="page left-page">
             {#if $sectionVisibility.personal}
-                <Personal character={currentCharacter} {handleUpdate} />
+                <Personal character={currentCharacter} {handleUpdate} readOnly={readOnly} />
             {/if}
             {#if $sectionVisibility.combat}
-                <Combat character={currentCharacter} {handleUpdate} />
+                <Combat character={currentCharacter} {handleUpdate} readOnly={readOnly} />
             {/if}
             {#if $sectionVisibility.abilitiesAndPowers}
-                <AbilitiesAndPowers character={currentCharacter} {handleUpdate} />
+                <AbilitiesAndPowers character={currentCharacter} {handleUpdate} readOnly={readOnly} />
             {/if}
             {#if $sectionVisibility.companions}
-                <Companions character={currentCharacter} {handleUpdate} />
+                <Companions character={currentCharacter} {handleUpdate} readOnly={readOnly} />
             {/if}
             {#if $sectionVisibility.notes}
-                <Notes character={currentCharacter} {handleUpdate} />
+                <Notes character={currentCharacter} {handleUpdate} readOnly={readOnly} />
             {/if}
         </div>
 
         <div class="page right-page">
             {#if $sectionVisibility.artifacts}
-                <Artifacts character={currentCharacter} {handleUpdate} />
+                <Artifacts character={currentCharacter} {handleUpdate} readOnly={readOnly} />
             {/if}
             {#if $sectionVisibility.equipment}
-                <Equipment character={currentCharacter} {handleUpdate} />
+                <Equipment character={currentCharacter} {handleUpdate} readOnly={readOnly} />
             {/if}
             {#if $sectionVisibility.wealth}
-                <Wealth character={currentCharacter} {handleUpdate} />
+                <Wealth character={currentCharacter} {handleUpdate} readOnly={readOnly} />
             {/if}
         </div>
     </div>
 
-    <FAB />
+    {#if !readOnly}
+        <FAB />
+    {/if}
 </div>
 
 <style>

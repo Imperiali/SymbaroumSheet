@@ -10,6 +10,7 @@
 
 	export let character: Character;
 	export let handleUpdate: (updates: Partial<Character>) => Promise<void>;
+	export let readOnly = false;
 
 	let races: Race[] = [];
 	let occupations: Occupation[] = [];
@@ -21,12 +22,14 @@
 	type AttributeName = keyof Character['attributes'];
 
 	function updateAttribute(name: AttributeName, value: number) {
-		handleUpdate({
-			attributes: {
-				...character.attributes,
-				[name]: value
-			}
-		});
+		if (!readOnly) {
+			handleUpdate({
+				attributes: {
+					...character.attributes,
+					[name]: value
+				}
+			});
+		}
 	}
 
 	function updateToast(newToast: Toast) {
@@ -56,15 +59,17 @@
 	];
 </script>
 
-<Section title="Atributos" let:locked>
+<Section title="Atributos" let:locked {readOnly}>
 	<div class="attributes-grid">
 		{#each attributes as { name, label }}
 			<div class="attribute">
 				<div class="header-container">
 					<label for={name}>{label}:</label>
-					<button on:click={() => rollD20(character.attributes[name], label)}>
-						<img src={dice} alt="dice icon" />
-					</button>
+					{#if !readOnly}
+						<button on:click={() => rollD20(character.attributes[name], label)}>
+							<img src={dice} alt="dice icon" />
+						</button>
+					{/if}
 				</div>
 				<input
 					type="number"
@@ -73,7 +78,7 @@
 					max="15"
 					value={character.attributes[name]}
 					on:input={(e) => updateAttribute(name, parseInt(e.currentTarget.value) || 10)}
-					disabled={locked}
+					disabled={locked || readOnly}
 				/>
 			</div>
 		{/each}
@@ -92,11 +97,11 @@
     button {
 		width: fit-content;
 	}
-  }
+	}
 	img {
 		width: 20px;
 		height: 20px;
-  }
+	}
 	.attribute {
 		display: flex;
 		flex-direction: column;

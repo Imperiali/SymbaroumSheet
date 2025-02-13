@@ -4,37 +4,44 @@
 
 	export let character: Character;
 	export let handleUpdate: (updates: Partial<Character>) => Promise<void>;
+	export let readOnly = false;
 
 	function addAbility() {
-		handleUpdate({
-			abilities: [
-				...character.abilities,
-				{
-					name: '',
-					effect: '',
-					type: '',
-					classification: 'N'
-				}
-			]
-		});
+		if (!readOnly) {
+			handleUpdate({
+				abilities: [
+					...character.abilities,
+					{
+						name: '',
+						effect: '',
+						type: '',
+						classification: 'N'
+					}
+				]
+			});
+		}
 	}
 
 	function removeAbility(index: number) {
-		handleUpdate({
-			abilities: character.abilities.filter((_, i) => i !== index)
-		});
+		if (!readOnly) {
+			handleUpdate({
+				abilities: character.abilities.filter((_, i) => i !== index)
+			});
+		}
 	}
 
 	function updateAbility(index: number, field: string, value: string) {
-		handleUpdate({
-			abilities: character.abilities.map((ability, i) =>
-				i === index ? { ...ability, [field]: value } : ability
-			)
-		});
+		if (!readOnly) {
+			handleUpdate({
+				abilities: character.abilities.map((ability, i) =>
+					i === index ? { ...ability, [field]: value } : ability
+				)
+			});
+		}
 	}
 </script>
 
-<Section title="Habilidades e Poderes" let:locked>
+<Section title="Habilidades e Poderes" let:locked {readOnly}>
 	<div class="abilities-list">
 		{#each character.abilities as ability, i}
 			<div class="ability-item">
@@ -44,7 +51,7 @@
 						id="ability-name-{i}" 
 						type="text" 
 						value={ability.name} 
-						disabled={locked}
+						disabled={locked || readOnly}
 						on:input={(e) => updateAbility(i, 'name', e.currentTarget.value)}
 					/>
 				</div>
@@ -54,7 +61,7 @@
 					<textarea 
 						id="ability-effect-{i}" 
 						value={ability.effect} 
-						disabled={locked}
+						disabled={locked || readOnly}
 						on:input={(e) => updateAbility(i, 'effect', e.currentTarget.value)}
 					></textarea>
 				</div>
@@ -65,7 +72,7 @@
 						id="ability-type-{i}" 
 						type="text" 
 						value={ability.type} 
-						disabled={locked}
+						disabled={locked || readOnly}
 						on:input={(e) => updateAbility(i, 'type', e.currentTarget.value)}
 					/>
 				</div>
@@ -75,7 +82,7 @@
 					<select
 						id="ability-classification-{i}"
 						value={ability.classification}
-						disabled={locked}
+						disabled={locked || readOnly}
 						on:change={(e) => updateAbility(i, 'classification', e.currentTarget.value)}
 					>
 						<option value="N">Novato</option>
@@ -84,7 +91,7 @@
 					</select>
 				</div>
 
-				{#if !locked}
+				{#if !locked && !readOnly}
 					<button class="remove-btn" on:click={() => removeAbility(i)}>
 						<span class="material-icons">delete</span>
 						Remover
@@ -93,7 +100,7 @@
 			</div>
 		{/each}
 
-		{#if !locked}
+		{#if !locked && !readOnly}
 			<button class="add-btn" on:click={addAbility}>
 				<span class="material-icons">add</span>
 				Adicionar Habilidade

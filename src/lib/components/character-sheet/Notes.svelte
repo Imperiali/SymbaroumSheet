@@ -4,35 +4,42 @@
 
 	export let character: Character;
 	export let handleUpdate: (updates: Partial<Character>) => Promise<void>;
+	export let readOnly = false;
 
 	function addNote() {
-		handleUpdate({
-			notes: [
-				...character.notes,
-				{
-					title: '',
-					description: ''
-				}
-			]
-		});
+		if (!readOnly) {
+			handleUpdate({
+				notes: [
+					...character.notes,
+					{
+						title: '',
+						description: ''
+					}
+				]
+			});
+		}
 	}
 
 	function removeNote(index: number) {
-		handleUpdate({
-			notes: character.notes.filter((_, i) => i !== index)
-		});
+		if (!readOnly) {
+			handleUpdate({
+				notes: character.notes.filter((_, i) => i !== index)
+			});
+		}
 	}
 
 	function updateNote(index: number, field: string, value: string) {
-		handleUpdate({
-			notes: character.notes.map((note, i) =>
-				i === index ? { ...note, [field]: value } : note
-			)
-		});
+		if (!readOnly) {
+			handleUpdate({
+				notes: character.notes.map((note, i) =>
+					i === index ? { ...note, [field]: value } : note
+				)
+			});
+		}
 	}
 </script>
 
-<Section title="Notas" let:locked>
+<Section title="Notas" let:locked {readOnly}>
 	{#each character.notes as item, index}
 		<div class="note-item">
 			<div class="field">
@@ -41,7 +48,7 @@
 					type="text"
 					id="note-name-{index}"
 					value={item.title}
-					disabled={locked}
+					disabled={locked || readOnly}
 					on:input={(e) => updateNote(index, 'title', e.currentTarget.value)}
 				/>
 			</div>
@@ -50,11 +57,11 @@
 				<textarea
 					id="note-description-{index}"
 					value={item.description}
-					disabled={locked}
+					disabled={locked || readOnly}
 					on:input={(e) => updateNote(index, 'description', e.currentTarget.value)}
 				></textarea>
 			</div>
-			{#if !locked}
+			{#if !locked && !readOnly}
 				<button class="remove-btn" on:click={() => removeNote(index)}>
 					<span class="material-icons">delete</span>
 					Remover
@@ -62,7 +69,7 @@
 			{/if}
 		</div>
 	{/each}
-	{#if !locked}
+	{#if !locked && !readOnly}
 		<button class="add-btn" on:click={addNote}>
 			<span class="material-icons">add</span>
 			Adicionar Notas
@@ -168,7 +175,7 @@
     label {
       font-size: .75rem;
     }
-  }
+	}
 
 	@media (max-width: 480px) {
 		label {
@@ -176,6 +183,6 @@
 		}
     .field {
     align-items: flex-start;
-    }
+		}
 	}
 </style>

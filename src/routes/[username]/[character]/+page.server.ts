@@ -3,8 +3,9 @@ import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firesto
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async ({ params, locals }) => {
     const { username, character: characterName } = params;
+    const userId = locals.user?.id;
 
     try {
         const playersRef = collection(db, 'players');
@@ -34,7 +35,8 @@ export const load: PageServerLoad = async ({ params }) => {
 
         return {
             username,
-            character
+            character,
+            isOwner: userId ? character.playerId === userId : false
         };
     } catch (e) {
         console.error('Error loading character:', e);

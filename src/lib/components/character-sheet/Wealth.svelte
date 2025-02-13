@@ -4,18 +4,21 @@
 
     export let character: Character;
     export let handleUpdate: (updates: Partial<Character>) => void;
+    export let readOnly = false;
 
     function updateMoney(currency: 'thaler' | 'shilling' | 'orteg', value: number) {
-        handleUpdate({
-            money: {
-                ...character.money,
-                [currency]: value
-            }
-        });
+        if (!readOnly) {
+            handleUpdate({
+                money: {
+                    ...character.money,
+                    [currency]: value
+                }
+            });
+        }
     }
 </script>
 
-<Section title="Riqueza" let:locked>
+<Section title="Riqueza" let:locked {readOnly}>
     <div class="field">
         <label for="thaler">Thalers:</label>
         <input 
@@ -24,7 +27,7 @@
             value={character.money.thaler} 
             on:input={(e) => updateMoney('thaler', +e.currentTarget.value)}
             min="0" 
-            disabled={locked} 
+            disabled={locked || readOnly} 
         />
     </div>
     <div class="field">
@@ -35,7 +38,7 @@
             value={character.money.shilling} 
             on:input={(e) => updateMoney('shilling', +e.currentTarget.value)}
             min="0" 
-            disabled={locked} 
+            disabled={locked || readOnly} 
         />
     </div>
     <div class="field">
@@ -46,7 +49,7 @@
             value={character.money.orteg} 
             on:input={(e) => updateMoney('orteg', +e.currentTarget.value)}
             min="0" 
-            disabled={locked} 
+            disabled={locked || readOnly} 
         />
     </div>
 </Section>

@@ -4,36 +4,43 @@
 
 	export let character: Character;
 	export let handleUpdate: (updates: Partial<Character>) => void;
+	export let readOnly = false;
 
 	function addEquipment() {
-		handleUpdate({
-			equipment: [
-				...character.equipment,
-				{
-					name: '',
-					description: ''
-				}
-			]
-		});
+		if (!readOnly) {
+			handleUpdate({
+				equipment: [
+					...character.equipment,
+					{
+						name: '',
+						description: ''
+					}
+				]
+			});
+		}
 	}
 
 	function removeEquipment(index: number) {
-		handleUpdate({
-			equipment: character.equipment.filter((_, i) => i !== index)
-		});
+		if (!readOnly) {
+			handleUpdate({
+				equipment: character.equipment.filter((_, i) => i !== index)
+			});
+		}
 	}
 
 	function updateEquipment(index: number, field: string, value: string) {
-		const updatedEquipment = [...character.equipment];
-		updatedEquipment[index] = {
-			...updatedEquipment[index],
-			[field]: value
-		};
-		handleUpdate({ equipment: updatedEquipment });
+		if (!readOnly) {
+			const updatedEquipment = [...character.equipment];
+			updatedEquipment[index] = {
+				...updatedEquipment[index],
+				[field]: value
+			};
+			handleUpdate({ equipment: updatedEquipment });
+		}
 	}
 </script>
 
-<Section title="Equipamento" let:locked>
+<Section title="Equipamento" let:locked {readOnly}>
 	{#each character.equipment as item, index}
 		<div class="equipment-item">
 			<div class="field">
@@ -43,7 +50,7 @@
 					id="equipment-name-{index}"
 					value={item.name}
 					on:input={(e) => updateEquipment(index, 'name', e.currentTarget.value)}
-					disabled={locked}
+					disabled={locked || readOnly}
 				/>
 			</div>
 			<div class="field">
@@ -52,10 +59,10 @@
 					id="equipment-description-{index}"
 					value={item.description}
 					on:input={(e) => updateEquipment(index, 'description', e.currentTarget.value)}
-					disabled={locked}
+					disabled={locked || readOnly}
 				></textarea>
 			</div>
-			{#if !locked}
+			{#if !locked && !readOnly}
 				<button class="remove-btn" on:click={() => removeEquipment(index)}>
 					<span class="material-icons">delete</span>
 					Remover
@@ -63,7 +70,7 @@
 			{/if}
 		</div>
 	{/each}
-	{#if !locked}
+	{#if !locked && !readOnly}
 		<button class="add-btn" on:click={addEquipment}>
 			<span class="material-icons">add</span>
 			Adicionar Equipamento

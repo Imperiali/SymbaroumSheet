@@ -16,6 +16,8 @@ export const signUp = async (email: string, password: string, name: string) => {
         token: userCredential.user.uid,
         characters: []
     });
+    const token = await userCredential.user.getIdToken();
+    document.cookie = `auth-token=${token}; path=/; max-age=${60 * 60 * 24 * 5}; SameSite=Strict`;
     return userCredential.user;
 };
 
@@ -28,6 +30,8 @@ export const login = async (email: string, password: string) => {
     }
 
     const playerData = playerDoc.data() as Player;
+    const token = await userCredential.user.getIdToken();
+    document.cookie = `auth-token=${token}; path=/; max-age=${60 * 60 * 24 * 5}; SameSite=Strict`;
     return {
         user: userCredential.user,
         player: playerData
@@ -46,4 +50,5 @@ export const getPlayer = async (userId: string): Promise<Player | null> => {
 
 export const logout = async () => {
     await signOut(auth);
+    document.cookie = 'auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
 };
