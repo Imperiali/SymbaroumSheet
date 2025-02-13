@@ -4,3 +4,15 @@ compatibility_flags = ["nodejs_compat"]
 
 [build]
 command = "npm run build"
+
+[site]
+bucket = ".svelte-kit/output/client"
+
+[build.upload]
+format = "modules"
+
+[env.production]
+name = "symbaroum-prod"
+
+[env.staging]
+name = "symbaroum-staging"

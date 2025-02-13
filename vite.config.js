@@ -6,7 +6,28 @@ export default defineConfig({
 	build: {
 		target: 'esnext',
 		rollupOptions: {
-			external: ['node:crypto', 'node:http', 'node:https', 'node:stream', 'node:assert', 'node:url', 'node:util', 'node:net'],
+			external: [
+				'node:crypto',
+				'node:http',
+				'node:https',
+				'node:stream',
+				'node:assert',
+				'node:url',
+				'node:util',
+				'node:net',
+				'node:fs',
+				'node:path',
+				'node:events',
+				'node:buffer',
+				'node:zlib',
+				'node:http2'
+			]
 		}
+	},
+	ssr: {
+		noExternal: ['firebase', '@firebase/*']
+	},
+	optimizeDeps: {
+		exclude: ['firebase', '@firebase/*']
 	}
 });
