@@ -16,10 +16,20 @@ export default defineConfig({
 			stream: 'stream-browserify',
 			crypto: 'crypto-browserify',
 			util: 'util',
-			buffer: 'buffer'
+			buffer: 'buffer',
+			'node:crypto': 'crypto-browserify',
+			'node:stream': 'stream-browserify',
+			'node:buffer': 'buffer',
+			'node:util': 'util',
+			'node:events': 'events',
+			'node:process': 'process'
 		}
 	},
 	optimizeDeps: {
-		include: ['buffer', 'path-browserify', 'stream-browserify', 'crypto-browserify', 'util']
+		esbuildOptions: {
+			define: {
+				global: 'globalThis'
+			}
+		}
 	}
 });

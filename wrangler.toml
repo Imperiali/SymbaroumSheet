@@ -5,3 +5,10 @@ main = ".svelte-kit/cloudflare/_worker.js"
 
 [site]
 bucket = ".svelte-kit/cloudflare"
+
+[build]
+command = "npm run build"
+pages_build_output_dir = ".svelte-kit/cloudflare"
+
+[build.upload]
+format = "service-worker"

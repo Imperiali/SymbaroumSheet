@@ -9,19 +9,10 @@ const config = {
 			routes: {
 				include: ['/*'],
 				exclude: []
-			},
-			runtime: {
-				type: 'service-worker',
-				env: {
-					dir: process.cwd()
-				}
 			}
 		}),
 		csrf: {
 			checkOrigin: false
-		},
-		env: {
-			dir: process.cwd()
 		}
 	}
 };
