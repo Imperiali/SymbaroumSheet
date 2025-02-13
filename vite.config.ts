@@ -10,9 +10,16 @@ export default defineConfig({
 	ssr: {
 		external: ['firebase-admin']
 	},
-	define: {
-		'process.env.NODE_ENV': '"production"',
-		'process.env': '{}',
-		'process.versions': '{}'
+	resolve: {
+		alias: {
+			path: 'path-browserify',
+			stream: 'stream-browserify',
+			crypto: 'crypto-browserify',
+			util: 'util',
+			buffer: 'buffer'
+		}
+	},
+	optimizeDeps: {
+		include: ['buffer', 'path-browserify', 'stream-browserify', 'crypto-browserify', 'util']
 	}
 });

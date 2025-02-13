@@ -5,15 +5,23 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 const config = {
 	preprocess: vitePreprocess(),
 	kit: {
-		adapter: adapter(),
-		serviceWorker: {
-			register: true
+		adapter: adapter({
+			routes: {
+				include: ['/*'],
+				exclude: []
+			},
+			runtime: {
+				type: 'service-worker',
+				env: {
+					dir: process.cwd()
+				}
+			}
+		}),
+		csrf: {
+			checkOrigin: false
 		},
 		env: {
 			dir: process.cwd()
-		},
-		csrf: {
-			checkOrigin: false
 		}
 	}
 };
