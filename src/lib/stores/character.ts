@@ -17,6 +17,13 @@ function createCharacterStore() {
                 const updatedChar = { ...char, ...updates };
                 if ('playerId' in char) {
                     saveCharacterLocally(updatedChar as Character & { playerId: string });
+                    fetch(`/api/characters/${char.id}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(updates)
+                    }).catch(err => console.error('Error syncing with server:', err));
                 }
                 return updatedChar;
             });
