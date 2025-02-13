@@ -10,13 +10,23 @@ const createTraitsStore = () => {
   return {
     subscribe,
     set: async (traits: Array<Trait>) => {
-       set(traits);
-       storageService.saveTraits(traits);
+      set(traits);
+      storageService.saveTraits(traits);
     },
     update: async (traits: Array<Trait>) => {
       set(traits);
     },
     load: async (param?: string) => {
+      if (param) {
+        try {
+          const trait = await TraitService.getTrait(param);
+        } catch (error) {
+          console.error('Erro ao carregar do Firebase:', error);
+          return null;
+        }
+        return;
+      }
+
       try {
         const traits = await TraitService.getTraits();
         if (traits) {
