@@ -8,10 +8,7 @@ export default defineConfig({
 		target: 'esnext'
 	},
 	ssr: {
-		noExternal: ['firebase', '@firebase/*']
-	},
-	optimizeDeps: {
-		exclude: ['firebase', '@firebase/*']
+		external: ['firebase-admin']
 	},
 	define: {
 		'process.env.NODE_ENV': '"production"',
