@@ -66,7 +66,8 @@
                         abilities: [],
                         companions: [],
                         artifacts: [],
-                        notes: []
+                        notes: [],
+                        traits: []
                     });
                 }
                 await goto(`/${characterName}`);

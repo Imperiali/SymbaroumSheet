@@ -2,7 +2,7 @@ export type AbilityType = 'Ability' | 'Mystical Power' | 'Ritual';
 
 export type AbilityClassification = 'N' | 'A' | 'M';
 
-export type AbilityActionType = 'Reaction' | 'Special' | 'Active' | 'Passive';
+export type AbilityActionType = 'Reaction' | 'Special' | 'Active' | 'Passive' | 'Free' | 'Full turn';
 
 export type AbilityRequirement = {
   attribute?: {
@@ -56,12 +56,12 @@ export function meetsRequirements(characterData: any, ability: Ability): boolean
     }
   }
 
-  if (requirements.race && !requirements.race.includes(characterData.race)) {
-    return false;
+  if (requirements.race) {
+    return requirements.race.includes(characterData.race);
   }
 
-  if (requirements.occupation && !requirements.occupation.includes(characterData.occupation)) {
-    return false;
+  if (requirements.occupation) {
+    return requirements.occupation.includes(characterData.occupation);
   }
 
   if (requirements.abilities) {

@@ -66,6 +66,11 @@
 		margin: 10px 0;
 		border: 1px solid var(--border-color);
 		position: relative;
+
+		input,
+		textarea {
+			width: 100%;
+		}
 	}
 
 	.field {
@@ -76,7 +81,6 @@
 	}
 
 	label {
-		width: 120px;
 		font-weight: bold;
 		color: var(--primary-color);
 		font-family: var(--header-font);
@@ -153,15 +157,11 @@
 	.remove-btn:hover {
 		background: #6b2828;
 	}
-  @media (max-width: 480px) {
-    label {
-      font-size: .75rem;
-    }
-  }
 
 	@media (max-width: 480px) {
 		label {
 			font-size: 0.7rem;
+			text-align: center;
 		}
     .field {
     align-items: flex-start;

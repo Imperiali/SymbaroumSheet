@@ -13,6 +13,7 @@
 	import Personal from './Personal.svelte';
 	import Notes from './Notes.svelte';
 	import FAB from '$lib/components/common/FAB.svelte';
+	import Traits from './Traits.svelte';
 
 	export let characterName: string;
 	let saveStatus = '';
@@ -69,10 +70,7 @@
 			{#if $sectionVisibility.abilitiesAndPowers}
 				<AbilitiesAndPowers abilities={$character?.abilities ?? []} />
 			{/if}
-			{#if $sectionVisibility.notes}
-				<Notes />
-				{/if}
-			</div>
+		</div>
 
 			<div class="page right-page">
 				{#if $sectionVisibility.companions}
@@ -87,7 +85,13 @@
 			{#if $sectionVisibility.wealth}
 				<Wealth />
 			{/if}
+      <Traits />
 		</div>
+	</div>
+	<div class="page full">
+		{#if $sectionVisibility.notes}
+			<Notes />
+		{/if}
 	</div>
 
 	<FAB />
