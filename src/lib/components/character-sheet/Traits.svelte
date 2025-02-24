@@ -46,7 +46,7 @@
 				</div>
 
 				<div class="field">
-					<label for="trait-effect-{i}">Description:</label>
+					<label for="trait-effect-{i}">Descrição:</label>
 					<textarea id="trait-effect-{i}" bind:value={trait.description} disabled={locked}
 					></textarea>
 				</div>
