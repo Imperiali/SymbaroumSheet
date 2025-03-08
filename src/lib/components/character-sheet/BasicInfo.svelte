@@ -4,11 +4,13 @@
 	import { getRaces, type Race } from '$lib/types/race';
 	import { getOccupations, type Occupation } from '$lib/types/occupation';
 	import { onMount } from 'svelte';
+	import { OccupationService } from '$lib/firebase/occupation';
 	let races: Race[] = [];
-	let occupations: Occupation[] = [];
-	onMount(async () => {
+	let occupations: Occupation[] | null = null;
+	
+  onMount(async () => {
 		races = await getRaces();
-		occupations = await getOccupations();
+		occupations = await OccupationService.getOccupations();
 	});
 
 	let visible = true;
@@ -40,6 +42,7 @@
 			/>
 		</div>
 
+    {#if occupations != null}
 		<div class="field occupation-field">
 			<label for="occupation">Ocupação:</label>
 			<div class="field-container">
@@ -55,6 +58,7 @@
 				</select>
 			</div>
 		</div>
+    {/if}
 
 		<div class="field multiple vitality-field">
 			<div class="header-container">

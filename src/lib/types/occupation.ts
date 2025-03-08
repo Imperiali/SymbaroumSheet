@@ -40,3 +40,9 @@ export function getOccupationById(id: string): Occupation | undefined {
 export function getOccupationName(id: string): string {
   return getOccupationById(id)?.name || id;
 }
+
+export type OccupationParams = {
+  id?: string;
+  name?: string;
+  job?: boolean;
+}
