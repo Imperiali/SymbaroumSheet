@@ -15,18 +15,6 @@ export type Occupation = {
 }
 
 export const occupations: Occupation[] = [
-  { id: 'artifact-crafter', name: 'Criador de Artefatos' },
-  { id: 'troll-singer', name: 'Cantor Troll' },
-  { id: 'staff-magister', name: 'Magista do Cajado' },
-  { id: 'symbolist', name: 'Simbolista' },
-  { id: 'confessor', name: 'Confessor' },
-  { id: 'demonologist', name: 'Demonologista' },
-  { id: 'inquisitor', name: 'Inquisidor' },
-  { id: 'sapper', name: 'Sapador' },
-  { id: 'weapon-master', name: 'Mestre de Armas' },
-  { id: 'iron-sworn', name: 'Jurado do Ferro' },
-  { id: 'axe-artist', name: 'Artista do Machado' },
-  { id: 'spear-dancer', name: 'Dançarino da Lança' }
 ];
 
 export async function getOccupations(): Promise<Occupation[]> {
