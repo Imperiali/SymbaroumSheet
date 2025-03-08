@@ -2,7 +2,7 @@
 	import { character } from '$lib/stores/character';
 	import Section from '$lib/components/common/Section.svelte';
 	import { getRaces, type Race } from '$lib/types/race';
-	import { getOccupations, type Occupation } from '$lib/types/occupation';
+	import { type Occupation } from '$lib/types/occupation';
 	import { onMount } from 'svelte';
 	import { OccupationService } from '$lib/firebase/occupation';
 	let races: Race[] = [];

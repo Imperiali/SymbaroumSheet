@@ -6,14 +6,12 @@
 	import type { Toast } from '$lib/types/toast';
 	import dice from '$lib/images/d20-icon.png';
 	import { getRaces, type Race } from '$lib/types/race';
-	import { getOccupations, type Occupation } from '$lib/types/occupation';
 	import { onMount } from 'svelte';
 
 	let races: Race[] = [];
-	let occupations: Occupation[] = [];
 	onMount(async () => {
 		races = await getRaces();
-		occupations = await getOccupations();
+		
 	});
 
 	type AttributeName = keyof Character['attributes'];
