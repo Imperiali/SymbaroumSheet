@@ -4,17 +4,14 @@
 	import type { Character } from '$lib/types/character';
 	import { toasts } from '$lib/stores/toast';
 	import type { Toast } from '$lib/types/toast';
-  import dice from '$lib/images/d20-icon.png';
-  import { getRaces, type Race } from '$lib/types/race';
-	import { getOccupations, type Occupation } from '$lib/types/occupation';
+	import dice from '$lib/images/d20-icon.png';
+	import { getRaces, type Race } from '$lib/types/race';
 	import { onMount } from 'svelte';
-	
-  
-  let races: Race[] = [];
-	let occupations: Occupation[] = [];
+
+	let races: Race[] = [];
 	onMount(async () => {
 		races = await getRaces();
-		occupations = await getOccupations();
+		
 	});
 
 	type AttributeName = keyof Character['attributes'];
@@ -49,9 +46,9 @@
 		{ name: 'cunning', label: 'Astuto' },
 		{ name: 'discreet', label: 'Discreto' },
 		{ name: 'persuasive', label: 'Persuasivo' },
-		{ name: 'quick', label: 'Ágil' },
+		{ name: 'quick', label: 'Rápido' },
 		{ name: 'resolute', label: 'Resoluto' },
-		{ name: 'strong', label: 'Forte' },
+		{ name: 'strong', label: 'Vigoroso' },
 		{ name: 'vigilant', label: 'Vigilante' }
 	];
 </script>
@@ -61,14 +58,11 @@
 		{#each attributes as { name, label }}
 			<div class="attribute">
 				<div class="header-container">
-          <label for={name}
-            >{label}:</label
-          >
-          <button on:click={() => rollD20($character.attributes[name], label)}>
-            <img src={dice} alt="dice icon" />
-          </button>
-
-        </div>
+					<label for={name}>{label}:</label>
+					<button on:click={() => rollD20($character.attributes[name], label)}>
+						<img src={dice} alt="dice icon" />
+					</button>
+				</div>
 				<input
 					type="number"
 					id={name}
@@ -89,17 +83,17 @@
 		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 		gap: 15px;
 	}
-  .header-container {
-    display: flex;
-    justify-content: space-between;
-    button {
-      width: fit-content;
-    }
-  }
-  img {
-    width: 20px;
-    height: 20px;
-  }
+	.header-container {
+		display: flex;
+		justify-content: space-between;
+		button {
+			width: fit-content;
+		}
+	}
+	img {
+		width: 20px;
+		height: 20px;
+	}
 	.attribute {
 		display: flex;
 		flex-direction: column;
@@ -151,8 +145,8 @@
 			gap: 15px;
 		}
 
-    label {
-		font-size: 0.75em;
-    }
+		label {
+			font-size: 0.75em;
+		}
 	}
 </style>

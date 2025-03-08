@@ -14,12 +14,12 @@
 	let selectedTrait: Trait | undefined;
 
 	function addTrait(newTrait: Trait) {
-		console.log(newTrait);
 		character.update((char) => ({
 			...char,
 			traits: [...char.traits, newTrait]
 		}));
 		showModal = false;
+		selectedTrait = undefined;
 	}
 
 	async function openModal() {
@@ -46,7 +46,7 @@
 				</div>
 
 				<div class="field">
-					<label for="trait-effect-{i}">Description:</label>
+					<label for="trait-effect-{i}">Descrição:</label>
 					<textarea id="trait-effect-{i}" bind:value={trait.description} disabled={locked}
 					></textarea>
 				</div>

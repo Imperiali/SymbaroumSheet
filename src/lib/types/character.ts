@@ -1,10 +1,11 @@
+import type { Occupation } from "./occupation";
 import type { Trait, TraitClassification, TraitClassificationObj, TraitType } from "./traits";
 
 export type Character = {
   // Informações Básicas
   name: string;
   race: string;
-  occupation?: string;
+  occupation?: Occupation;
   experience: number;
   currentExperience: number;
   shadow: string;
