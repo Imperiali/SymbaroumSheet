@@ -17,17 +17,6 @@ export type Occupation = {
 export const occupations: Occupation[] = [
 ];
 
-export async function getOccupations(): Promise<Occupation[]> {
-  return Promise.resolve(occupations);
-}
-
-export function getOccupationById(id: string): Occupation | undefined {
-  return occupations.find(occupation => occupation.id === id);
-}
-
-export function getOccupationName(id: string): string {
-  return getOccupationById(id)?.name || id;
-}
 
 export type OccupationParams = {
   id?: string;
