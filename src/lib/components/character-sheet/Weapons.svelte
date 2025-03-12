@@ -18,7 +18,7 @@
                     weapons: [...char.weapons, {
                         name: selectedWeapon!.name,
                         damage: selectedWeapon!.damage,
-                        grace: selectedWeapon!.grace || '',
+                        description: selectedWeapon!.description || '',
                         quality: selectedWeapon!.quality || '',
                         attribute: selectedWeapon!.attribute || '',
                         type: selectedWeapon!.type || '',
@@ -91,13 +91,13 @@
                 />
             </div>
             <div class="field">
-                <label for="weapon-grace-{i}">Graça:</label>
+                <label for="weapon-description-{i}">Descrição:</label>
                 <input 
                     type="text" 
-                    id="weapon-grace-{i}" 
-                    bind:value={weapon.grace}
+                    id="weapon-description-{i}" 
+                    bind:value={weapon.description}
                     disabled={locked}
-                    on:change={(e) => updateWeapon(i, 'grace', e.currentTarget.value)}
+                    on:change={(e) => updateWeapon(i, 'description', e.currentTarget.value)}
                 />
             </div>
             <div class="field">
@@ -165,8 +165,8 @@
                     {#if selectedWeapon.qualities && selectedWeapon.qualities.length > 0}
                         <p><strong>Qualidades:</strong> {selectedWeapon.qualities.join(', ')}</p>
                     {/if}
-                    {#if selectedWeapon.grace}
-                        <p><strong>Graça:</strong> {selectedWeapon.grace}</p>
+                    {#if selectedWeapon.description}
+                        <p><strong>Descrição:</strong> {selectedWeapon.description}</p>
                     {/if}
                     {#if selectedWeapon.quality}
                         <p><strong>Qualidade:</strong> {selectedWeapon.quality}</p>

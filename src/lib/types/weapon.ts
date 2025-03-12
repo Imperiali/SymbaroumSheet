@@ -5,7 +5,7 @@ export interface Weapon {
   cost?: number;
   qualities?: string[];
   type?: string;
-  grace?: string;
+  description?: string;
   quality?: string;
   attribute?: string;
 }
