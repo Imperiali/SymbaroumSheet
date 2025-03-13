@@ -1,11 +1,13 @@
 import type { Occupation } from "./occupation";
 import type { Trait, TraitClassification, TraitClassificationObj, TraitType } from "./traits";
+import type { Weapon } from "./weapon";
+import type { Armor } from "./armor";
 
 export type Character = {
   // Informações Básicas
   name: string;
   race: string;
-  occupation?: Occupation;
+  occupation?: Occupation | string;
   experience: number;
   currentExperience: number;
   shadow: string;
@@ -47,18 +49,8 @@ export type Character = {
   };
 
   // Combate
-  armor: Array<{
-    name: string;
-    protection: number;
-    quality: string;
-  }>;
-  weapons: Array<{
-    name: string;
-    grace: string;
-    damage: string;
-    quality: string;
-    attribute: string;
-  }>;
+  armor: Array<Partial<Armor>>;
+  weapons: Array<Partial<Weapon>>;
 
   // Equipamento e Riqueza
   money: {

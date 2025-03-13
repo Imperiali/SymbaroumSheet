@@ -1,15 +1,19 @@
 import { browser } from '$app/environment';
 import type { Ability } from '$lib/types/ability';
+import type { Armor } from '$lib/types/armor';
 import type { Character } from '$lib/types/character';
 import type { Occupation } from '$lib/types/occupation';
 import type { Toast } from '$lib/types/toast';
 import type { Trait } from '$lib/types/traits';
+import type { Weapon } from '$lib/types/weapon';
 
 const STORAGE_KEY_SHEET = 'symbaroum-character';
 const STORAGE_KEY_TOASTS = 'toast-list';
 const STORAGE_KEY_TRAITS = 'traits-list';
 const STORAGE_KEY_OCCUPATIONS = 'occupation-list';
 const STORAGE_KEY_ABILITIES = 'abilities-list';
+const STORAGE_KEY_WEAPONS = 'weapons-list';
+const STORAGE_KEY_ARMORS = 'armors-list';
 
 export const storageService = {
   saveCharacter: (character: Character): void => {
@@ -115,6 +119,50 @@ export const storageService = {
         return stored ? JSON.parse(stored) : null;
       } catch (error) {
         console.error('Error loading abilities:', error);
+        return null;
+      }
+    }
+    return null;
+  },
+  saveWeapons(weapons: Array<Weapon>): void {
+    if (browser) {
+      try {
+        localStorage.setItem(STORAGE_KEY_WEAPONS, JSON.stringify(weapons));
+      } catch (error) {
+        console.error('Error saving weapons:', error);
+      }
+    }
+  },
+
+  loadWeapons(): Array<Weapon> | null {
+    if (browser) {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY_WEAPONS);
+        return stored ? JSON.parse(stored) : null;
+      } catch (error) {
+        console.error('Error loading weapons:', error);
+        return null;
+      }
+    }
+    return null;
+  },
+  saveArmors(armors: Array<Armor>): void {
+    if (browser) {
+      try {
+        localStorage.setItem(STORAGE_KEY_ARMORS, JSON.stringify(armors));
+      } catch (error) {
+        console.error('Error saving armors:', error);
+      }
+    }
+  },
+
+  loadArmors(): Array<Armor> | null {
+    if (browser) {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY_ARMORS);
+        return stored ? JSON.parse(stored) : null;
+      } catch (error) {
+        console.error('Error loading armors:', error);
         return null;
       }
     }
