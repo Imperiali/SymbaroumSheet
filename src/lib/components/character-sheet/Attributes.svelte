@@ -134,9 +134,9 @@
 	}
 
 	const attributes: Array<{ name: AttributeName; label: string }> = [
-		{ name: 'accurate', label: 'Preciso' },
 		{ name: 'cunning', label: 'Astuto' },
 		{ name: 'discreet', label: 'Discreto' },
+		{ name: 'accurate', label: 'Preciso' },
 		{ name: 'persuasive', label: 'Persuasivo' },
 		{ name: 'quick', label: 'Rápido' },
 		{ name: 'resolute', label: 'Resoluto' },
