@@ -22,6 +22,74 @@
 		}));
 	}
 
+	function calculateVitality(strongValue: number): number {
+		return Math.max(strongValue, 10);
+	}
+
+	function calculatePainThreshold(strongValue: number): number {
+		return Math.ceil(strongValue / 2);
+	}
+
+	function calculateDefense(quickValue: number): number {
+		return quickValue;
+	}
+
+	function calculateCorruptionThreshold(resoluteValue: number): number {
+		return Math.ceil(resoluteValue / 2);
+	}
+
+	function getTotalAttributeValue(name: keyof typeof $character.attributes): number {
+		const baseValue = $character?.attributes[name] || 0;
+		const bonusValue = $character?.attributesBonuses?.[name] || 0;
+		return baseValue + bonusValue;
+	}
+
+	$: if ($character) {
+		const strongValue = getTotalAttributeValue('strong');
+		const quickValue = getTotalAttributeValue('quick');
+		const resoluteValue = getTotalAttributeValue('resolute');
+		
+		const newVitalityMax = calculateVitality(strongValue);
+		if ($character.vitality.max !== newVitalityMax) {
+			character.update((char) => ({
+				...char,
+				vitality: {
+					...char.vitality,
+					max: newVitalityMax,
+					current: Math.min(char.vitality.current, newVitalityMax)
+				}
+			}));
+		}
+		
+		const newPainThreshold = calculatePainThreshold(strongValue);
+		if ($character.painThreshold !== newPainThreshold) {
+			character.update((char) => ({
+				...char,
+				painThreshold: newPainThreshold
+			}));
+		}
+		
+		const newDefense = calculateDefense(quickValue);
+		if ($character.toughness.base !== newDefense) {
+			character.update((char) => ({
+				...char,
+				toughness: {
+					...char.toughness,
+					base: newDefense,
+					current: newDefense
+				}
+			}));
+		}
+		
+		const newCorruptionThreshold = calculateCorruptionThreshold(resoluteValue);
+		if ($character.corruptionThreshold !== newCorruptionThreshold) {
+			character.update((char) => ({
+				...char,
+				corruptionThreshold: newCorruptionThreshold
+			}));
+		}
+	}
+
 	$: vitalityPercentage =
 		$character?.vitality?.current != null && $character?.vitality?.max != null
 			? ($character.vitality.current / $character.vitality.max) * 100
@@ -119,29 +187,21 @@
 					<div class="field-container">
 						<label for="maxVitality">Máxima:</label>
 						<input
-							disabled={locked}
+							disabled={true}
 							type="number"
 							id="maxVitality"
-							bind:value={$character.vitality.max}
-							on:input={(e) => {
-								character.update((char) => ({
-									...char,
-									vitality: {
-										...char.vitality,
-										max: parseInt(e.currentTarget.value) || 0
-									}
-								}));
-							}}
+							value={$character.vitality.max}
+							title="Valor calculado automaticamente (Vigoroso, mínimo 10)"
 						/>
 					</div>
 					<div class="field-container">
 						<label for="painThreshold">Limiar:</label>
 						<input
-							disabled={locked}
+							disabled={true}
 							type="number"
 							id="painThreshold"
-							bind:value={$character.painThreshold}
-							on:input={(e) => updateField('painThreshold', parseInt(e.currentTarget.value) || 0)}
+							value={$character.painThreshold}
+							title="Valor calculado automaticamente (Vigoroso/2, arredondado para cima)"
 						/>
 					</div>
 				</div>
@@ -213,12 +273,11 @@
 				<div class="field-container">
 					<label for="corruptionThreshold">Limiar:</label>
 					<input
-						disabled={locked}
+						disabled={true}
 						type="number"
 						id="corruptionThreshold"
-						bind:value={$character.corruptionThreshold}
-						on:input={(e) =>
-							updateField('corruptionThreshold', parseInt(e.currentTarget.value) || 0)}
+						value={$character.corruptionThreshold}
+						title="Valor calculado automaticamente (Resoluto/2, arredondado para cima)"
 					/>
 				</div>
 			</div>

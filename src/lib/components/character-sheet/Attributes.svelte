@@ -1,15 +1,13 @@
 <script lang="ts">
-	import { character } from '$lib/stores/character';
-	import Section from '$lib/components/common/Section.svelte';
-	import type { Character } from '$lib/types/character';
-	import { toasts } from '$lib/stores/toast';
-	import type { Toast } from '$lib/types/toast';
-	import dice from '$lib/images/d20-icon.png';
-	import { getRaces, type Race } from '$lib/types/race';
 	import { onMount } from 'svelte';
+	import Section from '$lib/components/common/Section.svelte';
 	import Modal from '$lib/components/common/Modal.svelte';
+	import dice from '$lib/images/d20-icon.png';
+	import { character } from '$lib/stores/character';
+	import { toasts } from '$lib/stores/toast';
+	import type { Character } from '$lib/types/character';
+	import type { Toast } from '$lib/types/toast';
 
-	let races: Race[] = [];
 	let showEditModal = false;
 	let tempAttributes = {
 		accurate: 0,
@@ -33,8 +31,6 @@
 	};
 
 	onMount(async () => {
-		races = await getRaces();
-		
 		character.update((char) => {
 			if (!char.attributesBonuses) {
 				return {
