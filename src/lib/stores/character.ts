@@ -32,6 +32,16 @@ const createCharacterStore = () => {
             strong: 10,
             vigilant: 10
         },
+        attributesBonuses: {
+            accurate: 0,
+            cunning: 0,
+            discreet: 0,
+            persuasive: 0,
+            quick: 0,
+            resolute: 0,
+            strong: 0,
+            vigilant: 0
+        },
         toughness: {
             base: 10,
             current: 10
@@ -102,13 +112,25 @@ const createCharacterStore = () => {
             try {
                 const character = await CharacterService.getCharacter(characterName);
                 if (character) {
-                    const characterWithOccupation = {
-                        ...character,
-                        occupation: character.occupation || ''
+                    const defaultBonuses = {
+                        accurate: 0,
+                        cunning: 0,
+                        discreet: 0,
+                        persuasive: 0,
+                        quick: 0,
+                        resolute: 0,
+                        strong: 0,
+                        vigilant: 0
                     };
                     
-                    set(characterWithOccupation);
-                    storageService.saveCharacter(characterWithOccupation);
+                    const characterWithDefaults = {
+                        ...character,
+                        occupation: character.occupation || '',
+                        attributesBonuses: character.attributesBonuses || defaultBonuses
+                    };
+                    
+                    set(characterWithDefaults);
+                    storageService.saveCharacter(characterWithDefaults);
                     return;
                 }
             } catch (error) {
@@ -117,13 +139,25 @@ const createCharacterStore = () => {
 
             const localCharacter = storageService.loadCharacter();
             if (localCharacter) {
-                const localWithOccupation = {
-                    ...localCharacter,
-                    occupation: localCharacter.occupation || ''
+                const defaultBonuses = {
+                    accurate: 0,
+                    cunning: 0,
+                    discreet: 0,
+                    persuasive: 0,
+                    quick: 0,
+                    resolute: 0,
+                    strong: 0,
+                    vigilant: 0
                 };
                 
-                set(localWithOccupation);
-                CharacterService.updateCharacter(characterName, localWithOccupation).catch(error => {
+                const localWithDefaults = {
+                    ...localCharacter,
+                    occupation: localCharacter.occupation || '',
+                    attributesBonuses: localCharacter.attributesBonuses || defaultBonuses
+                };
+                
+                set(localWithDefaults);
+                CharacterService.updateCharacter(characterName, localWithDefaults).catch(error => {
                     console.error('Erro ao sincronizar com Firebase:', error);
                 });
             }

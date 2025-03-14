@@ -1,5 +1,5 @@
 import type { Occupation } from "./occupation";
-import type { Trait, TraitClassification, TraitClassificationObj, TraitType } from "./traits";
+import type { Trait } from "./traits";
 import type { Weapon } from "./weapon";
 import type { Armor } from "./armor";
 
@@ -40,6 +40,18 @@ export type Character = {
     resolute: number;
     strong: number;
     vigilant: number;
+  };
+
+  // Bônus de Atributos
+  attributesBonuses: {
+    accurate?: number;
+    cunning?: number;
+    discreet?: number;
+    persuasive?: number;
+    quick?: number;
+    resolute?: number;
+    strong?: number;
+    vigilant?: number;
   };
 
   // Status
