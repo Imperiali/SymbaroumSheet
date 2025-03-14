@@ -60,13 +60,15 @@
     border-radius: 2px;
     min-width: 400px;
     max-width: 90%;
-    max-height: 400px;
-    overflow-y: scroll;
+    max-height: 80vh;
+    overflow-y: auto;
     overflow-x: hidden;
     margin: 0 auto;
     border: 2px solid var(--border-color);
     position: relative;
     scrollbar-color: var(--border-color) white;
     scrollbar-width: thin;
+    display: flex;
+    flex-direction: column;
   }
 </style>
