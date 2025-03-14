@@ -42,6 +42,18 @@ export type Character = {
     vigilant: number;
   };
 
+  // Bônus de Atributos
+  attributesBonuses: {
+    accurate?: number;
+    cunning?: number;
+    discreet?: number;
+    persuasive?: number;
+    quick?: number;
+    resolute?: number;
+    strong?: number;
+    vigilant?: number;
+  };
+
   // Status
   toughness: {
     base: number;
