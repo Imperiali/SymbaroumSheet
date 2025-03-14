@@ -1,5 +1,5 @@
 import type { Occupation } from "./occupation";
-import type { Trait, TraitClassification, TraitClassificationObj, TraitType } from "./traits";
+import type { Trait } from "./traits";
 import type { Weapon } from "./weapon";
 import type { Armor } from "./armor";
 
