@@ -32,6 +32,16 @@ const createCharacterStore = () => {
             strong: 10,
             vigilant: 10
         },
+        attributesBonuses: {
+            accurate: 0,
+            cunning: 0,
+            discreet: 0,
+            persuasive: 0,
+            quick: 0,
+            resolute: 0,
+            strong: 0,
+            vigilant: 0
+        },
         toughness: {
             base: 10,
             current: 10
@@ -61,17 +71,34 @@ const createCharacterStore = () => {
         },
         set: async (character: Character) => {
             if (!currentCharacterName) throw new Error('Character name not set');
-            set(character);
-            storageService.saveCharacter(character);
-            await CharacterService.updateCharacter(currentCharacterName, character);
+            
+            const characterToSave = {
+                ...character,
+                occupation: character.occupation || ''
+            };
+            
+            set(characterToSave);
+            storageService.saveCharacter(characterToSave);
+            await CharacterService.updateCharacter(currentCharacterName, characterToSave);
         },
         update: async (fn: (character: Character) => Character) => {
             if (!currentCharacterName) throw new Error('Character name not set');
+            
             update(char => {
                 const updated = fn(char);
-                storageService.saveCharacter(updated);
-                CharacterService.updateCharacter(currentCharacterName!, updated);
-                return updated;
+                
+                const updatedWithOccupation = {
+                    ...updated,
+                    occupation: updated.occupation || ''
+                };
+                
+                storageService.saveCharacter(updatedWithOccupation);
+                CharacterService.updateCharacter(currentCharacterName!, updatedWithOccupation)
+                    .catch(error => {
+                        console.error('Erro ao atualizar personagem no Firebase:', error);
+                    });
+                
+                return updatedWithOccupation;
             });
         },
         reset: async () => {
@@ -85,8 +112,25 @@ const createCharacterStore = () => {
             try {
                 const character = await CharacterService.getCharacter(characterName);
                 if (character) {
-                    set(character);
-                    storageService.saveCharacter(character);
+                    const defaultBonuses = {
+                        accurate: 0,
+                        cunning: 0,
+                        discreet: 0,
+                        persuasive: 0,
+                        quick: 0,
+                        resolute: 0,
+                        strong: 0,
+                        vigilant: 0
+                    };
+                    
+                    const characterWithDefaults = {
+                        ...character,
+                        occupation: character.occupation || '',
+                        attributesBonuses: character.attributesBonuses || defaultBonuses
+                    };
+                    
+                    set(characterWithDefaults);
+                    storageService.saveCharacter(characterWithDefaults);
                     return;
                 }
             } catch (error) {
@@ -95,8 +139,25 @@ const createCharacterStore = () => {
 
             const localCharacter = storageService.loadCharacter();
             if (localCharacter) {
-                set(localCharacter);
-                CharacterService.updateCharacter(characterName, localCharacter).catch(error => {
+                const defaultBonuses = {
+                    accurate: 0,
+                    cunning: 0,
+                    discreet: 0,
+                    persuasive: 0,
+                    quick: 0,
+                    resolute: 0,
+                    strong: 0,
+                    vigilant: 0
+                };
+                
+                const localWithDefaults = {
+                    ...localCharacter,
+                    occupation: localCharacter.occupation || '',
+                    attributesBonuses: localCharacter.attributesBonuses || defaultBonuses
+                };
+                
+                set(localWithDefaults);
+                CharacterService.updateCharacter(characterName, localWithDefaults).catch(error => {
                     console.error('Erro ao sincronizar com Firebase:', error);
                 });
             }

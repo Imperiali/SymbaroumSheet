@@ -38,7 +38,7 @@
                 <input type="text" id="companion-occupation-{index}" bind:value={companion.occupation} disabled={locked} />
             </div>
             <div class="field">
-                <label for="companion-player-{index}">Dinheiro:</label>
+                <label for="companion-player-{index}">Jogador:</label>
                 <input type="text" id="companion-player-{index}" bind:value={companion.player} disabled={locked} />
             </div>
             {#if !locked}

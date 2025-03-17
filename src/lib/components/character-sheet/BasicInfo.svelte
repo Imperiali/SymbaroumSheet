@@ -244,23 +244,23 @@
 						</select>
 					</div>
 				</div>
-
-				<div class="field shadow-field">
-					<label for="shadow">Sombra:</label>
-					<input
-						disabled={locked}
-						type="text"
-						id="shadow"
-						bind:value={$character.shadow}
-						on:input={(e) => updateField('shadow', e.currentTarget.value)}
-					/>
-				</div>
+				
 				<div class="field quote-field">
 					<label for="quote">Citação:</label>
-					<textarea
+					<input
+						type="text"
 						id="quote"
 						bind:value={$character.quote}
 						on:input={(e) => updateField('quote', e.currentTarget.value)}
+					/>
+				</div>
+				<div class="field shadow-field">
+					<label for="shadow">Sombra:</label>
+					<textarea
+						disabled={locked}
+						id="shadow"
+						bind:value={$character.shadow}
+						on:input={(e) => updateField('shadow', e.currentTarget.value)}
 					></textarea>
 				</div>
 			{/if}
