@@ -3,7 +3,7 @@
 	const dispatch = createEventDispatcher();
 
 	export let title: string;
-	export let locked = false;
+	export let locked = true;
 	let visible = true;
 
 	function toggleLock() {
