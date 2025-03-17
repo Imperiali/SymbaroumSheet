@@ -145,14 +145,18 @@
 					{/if}
 				</div>
 				{#if trait?.classification != null}
-				<div class="field">
-					<label for="trait-classification-{i}">Classificação:</label>
-					<select id="trait-classification-{i}" bind:value={trait.classification} disabled={locked}>
-						<option value="N">Novato</option>
-						<option value="A">Adepto</option>
-						<option value="M">Mestre</option>
-					</select>
-				</div>
+					<div class="field">
+						<label for="trait-classification-{i}">Classificação:</label>
+						<select
+							id="trait-classification-{i}"
+							bind:value={trait.classification}
+							disabled={locked}
+						>
+							<option value="N">Novato</option>
+							<option value="A">Adepto</option>
+							<option value="M">Mestre</option>
+						</select>
+					</div>
 				{/if}
 
 				{#if trait?.novice && trait?.classification != null}
@@ -160,32 +164,56 @@
 						<div class="label-container">
 							<span class="label">Novato</span>
 							{#if currentItemEditting == i && !locked}
-							<input type="text" id="trait-classification-novice-action-{i}" bind:value={trait.novice.action}/>
+								<select
+									id="trait-classification-novice-action-{i}"
+									bind:value={trait.novice.action}
+									disabled={locked}
+								>
+									<option value="Reaction">Reação</option>
+									<option value="Special">Especial</option>
+									<option value="Active">Ativo</option>
+									<option value="Passive">Passivo</option>
+									<option value="Free">Livre</option>
+									<option value="Full turn">Turno Completo</option>
+								</select>
 							{:else}
-							<span class="classification-action">{getTraitActionType(trait.novice)}</span>
+								<span class="classification-action">{getTraitActionType(trait.novice)}</span>
 							{/if}
 						</div>
 						{#if currentItemEditting == i && !locked}
-							<textarea id="trait-classification-novice-description-{i}" bind:value={trait.novice.description}></textarea>
-							{:else}
-						<span class="description">{trait.novice.description}</span>
+							<textarea
+								id="trait-classification-novice-description-{i}"
+								bind:value={trait.novice.description}
+							></textarea>
+						{:else}
+							<span class="description">{trait.novice.description}</span>
 						{/if}
 					</div>
 				{/if}
-				{#if (trait?.adept && (trait?.classification == 'A') || trait?.classification == 'M')}
+				{#if (trait?.adept && trait?.classification == 'A') || trait?.classification == 'M'}
 					<div class="classification-container">
 						<div class="label-container">
 							<span class="label">Adepto</span>
 							{#if currentItemEditting == i && !locked}
-							<input type="text" id="trait-classification-adept-action-{i}" bind:value={trait.adept!.action}/>
+								<select id="trait-classification-adept-action-{i}" bind:value={trait.adept!.action}>
+									<option value="Reaction">Reação</option>
+									<option value="Special">Especial</option>
+									<option value="Active">Ativo</option>
+									<option value="Passive">Passivo</option>
+									<option value="Free">Livre</option>
+									<option value="Full turn">Turno Completo</option>
+								</select>
 							{:else}
-							<span class="classification-action">{getTraitActionType(trait!.adept!)}</span>
+								<span class="classification-action">{getTraitActionType(trait!.adept!)}</span>
 							{/if}
 						</div>
 						{#if currentItemEditting == i && !locked}
-							<textarea id="trait-classification-adept-description-{i}" bind:value={trait.adept!.description}></textarea>
-							{:else}
-						<span class="description">{trait!.adept?.description}</span>
+							<textarea
+								id="trait-classification-adept-description-{i}"
+								bind:value={trait.adept!.description}
+							></textarea>
+						{:else}
+							<span class="description">{trait!.adept?.description}</span>
 						{/if}
 					</div>
 				{/if}
@@ -194,15 +222,28 @@
 						<div class="label-container">
 							<span class="label">Mestre</span>
 							{#if currentItemEditting == i && !locked}
-							<input type="text" id="trait-classification-master-action-{i}" bind:value={trait.master.action}/>
+								<select
+									id="trait-classification-master-action-{i}"
+									bind:value={trait.master.action}
+								>
+									<option value="Reaction">Reação</option>
+									<option value="Special">Especial</option>
+									<option value="Active">Ativo</option>
+									<option value="Passive">Passivo</option>
+									<option value="Free">Livre</option>
+									<option value="Full turn">Turno Completo</option>
+								</select>
 							{:else}
-							<span class="classification-action">{getTraitActionType(trait.master)}</span>
+								<span class="classification-action">{getTraitActionType(trait.master)}</span>
 							{/if}
 						</div>
 						{#if currentItemEditting == i && !locked}
-							<textarea id="trait-classification-master-description-{i}" bind:value={trait.master.description}></textarea>
-							{:else}
-						<span class="description">{trait.master.description}</span>
+							<textarea
+								id="trait-classification-master-description-{i}"
+								bind:value={trait.master.description}
+							></textarea>
+						{:else}
+							<span class="description">{trait.master.description}</span>
 						{/if}
 					</div>
 				{/if}
@@ -338,6 +379,7 @@
 	textarea {
 		resize: vertical;
 		min-height: 100px;
+		width: 100%;
 	}
 
 	input:focus,
@@ -439,18 +481,6 @@
 				grid-column: 2;
 			}
 		}
-	}
-
-	.lock-btn {
-		flex: 0;
-		background: none;
-		border: none;
-		padding: 10px;
-		cursor: pointer;
-		color: var(--primary-color);
-		display: flex;
-		align-items: center;
-		justify-content: center;
 	}
 
 	.group-container {
