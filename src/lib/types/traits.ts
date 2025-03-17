@@ -9,15 +9,15 @@ export type TraitClassificationObj = {
   action: TraitActionType;
 }
 
-export interface Trait {
+export type Trait = {
   id: string;
   name: string;
   type: TraitType;
-  classification?: Array<TraitClassification>;
+  classification?: TraitClassification;
   description: string;
-  novice?: TraitClassificationObj
-  adept?: TraitClassificationObj
-  master?: TraitClassificationObj
+  novice?: TraitClassificationObj;
+  adept?: TraitClassificationObj;
+  master?: TraitClassificationObj;
 }
 
 export function formattedClassification(classification: TraitClassification) {
@@ -28,6 +28,19 @@ export function formattedClassification(classification: TraitClassification) {
       return 'Adepto';
     case 'M':
       return 'Mestre';
+    default:
+      return '';
+  }
+}
+
+export function getTraitType(type:TraitType) {
+  switch (type) {
+    case 'Trait':
+      return 'Traço';
+    case 'Boon':
+      return 'Dádiva';
+    case 'Burden':
+      return 'Fardo';
     default:
       return '';
   }
