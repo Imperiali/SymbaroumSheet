@@ -43,11 +43,6 @@
 		}));
 	}
 
-	function canEdit(index: number) {
-		console.log('canEdit', currentItemEditting == index);
-		return currentItemEditting == index;
-	}
-
 	function toggleEdit(i?: number) {
 		if (i != undefined) {
 			if (currentItemEditting == i) {
