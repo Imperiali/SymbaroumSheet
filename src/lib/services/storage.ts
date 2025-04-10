@@ -111,7 +111,6 @@ export const storageService = {
       }
     }
   },
-
   loadAbilities(): Array<Ability> | null {
     if (browser) {
       try {

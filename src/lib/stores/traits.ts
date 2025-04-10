@@ -20,11 +20,11 @@ const createTraitsStore = () => {
       if (param) {
         try {
           const trait = await TraitService.getTrait(param);
+          return trait;
         } catch (error) {
           console.error('Erro ao carregar do Firebase:', error);
           return null;
         }
-        return;
       }
 
       try {

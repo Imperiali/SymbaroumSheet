@@ -28,19 +28,11 @@
 		<div class="equipment-item">
 			<div class="field">
 				<label for="equipment-name-{index}">Nome:</label>
-				<input
-					type="text"
-					id="equipment-name-{index}"
-					bind:value={item.name}
-					disabled={locked}
-				/>
+				<input type="text" id="equipment-name-{index}" bind:value={item.name} disabled={locked} />
 			</div>
 			<div class="field">
 				<label for="equipment-description-{index}">Descrição:</label>
-				<textarea
-					id="equipment-description-{index}"
-					bind:value={item.description}
-					disabled={locked}
+				<textarea id="equipment-description-{index}" bind:value={item.description} disabled={locked}
 				></textarea>
 			</div>
 			{#if !locked}
@@ -151,5 +143,21 @@
 
 	.remove-btn:hover {
 		background: #6b2828;
+	}
+
+	@media (max-width: 480px) {
+		.field {
+			flex-direction: column;
+			gap: 0.5rem;
+			align-items: flex-start;
+		}
+
+    input, textarea {
+      width: 100%;
+    }
+
+    textarea {
+      min-height: 100px;
+    }
 	}
 </style>

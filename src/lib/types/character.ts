@@ -1,3 +1,4 @@
+import type { Ability } from "./ability";
 import type { Occupation } from "./occupation";
 import type { Trait } from "./traits";
 import type { Weapon } from "./weapon";
@@ -77,12 +78,7 @@ export type Character = {
   }>;
 
   // Habilidades e Poderes
-  abilities: Array<{
-    name: string;
-    effect: string;
-    type: string;
-    classification: 'N' | 'A' | 'M';
-  }>;
+  abilities: Array<Ability>;
 
   // Amigos e Companheiros
   companions: Array<{
